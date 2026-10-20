@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>聚创云AI智算智造平台 - 模块化架构与安全底座</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #132668;       /* 品牌底色 */
+            --accent-blue: #1567db;   /* 高亮科技蓝 */
+            --accent-gold: #ffc000;   /* 高亮活力金 */
+            --panel-bg: rgba(255, 255, 255, 0.05);
+            --text-white: #ffffff;
+            --text-muted: #a0b2d3;
+            --border: rgba(21, 103, 219, 0.5);
+            --safe-green: #00e676;
+            --warn-red: #ff4d4d;
+        }
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-white);
+            font-family: 'Segoe UI', "Microsoft YaHei", sans-serif;
+            margin: 0; padding: 25px;
+            background-image: radial-gradient(circle at 50% 50%, rgba(21, 103, 219, 0.1) 0%, transparent 80%);
+        }
+        .container { max-width: 1500px; margin: 0 auto; }
+        
+        /* Header */
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--accent-blue);
+            padding-bottom: 15px; margin-bottom: 35px;
+        }
+        .header h1 { font-size: 30px; margin: 0; font-weight: 700; }
+        .header h1 span { color: var(--accent-gold); }
+        .page-tag { background: var(--accent-gold); color: #000; padding: 3px 12px; font-size: 14px; font-weight: 800; border-radius: 4px; }
+
+        /* 爆炸图：模块化防御体系 (Exploded Safety Shield) */
+        .safety-infographic {
+            display: flex; justify-content: space-around; align-items: center;
+            background: rgba(21, 103, 219, 0.08);
+            padding: 50px; border-radius: 24px;
+            border: 1px solid var(--border);
+            margin-bottom: 45px;
+            position: relative;
+        }
+
+        /* 模块中心 */
+        .shield-core {
+            width: 300px; height: 300px; border: 3px solid var(--accent-gold);
+            border-radius: 50%; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            background: radial-gradient(circle, rgba(255, 192, 0, 0.1) 0%, transparent 70%);
+            box-shadow: 0 0 50px rgba(255, 192, 0, 0.3);
+            position: relative; z-index: 5;
+        }
+        .shield-core i { font-size: 80px; color: var(--accent-gold); margin-bottom: 15px; }
+        .shield-core h3 { margin: 0; font-size: 22px; letter-spacing: 2px; }
+
+        /* 爆炸飞出的模块卡片 */
+        .module-node {
+            position: absolute; background: var(--bg-main); border: 1px solid var(--accent-blue);
+            padding: 15px 25px; border-radius: 12px; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4); transition: 0.3s; z-index: 10;
+        }
+        .module-node:hover { border-color: var(--accent-gold); transform: scale(1.05); }
+        .module-node i { font-size: 24px; color: var(--accent-gold); }
+        .module-node b { display: block; font-size: 15px; color: var(--text-white); }
+        .module-node span { font-size: 12px; color: var(--text-muted); }
+
+        /* 定位模块 */
+        .m1 { top: 30px; left: 150px; }
+        .m2 { top: 30px; right: 150px; }
+        .m3 { bottom: 30px; left: 150px; }
+        .m4 { bottom: 30px; right: 150px; }
+        .m5 { left: 40px; top: 50%; transform: translateY(-50%); }
+        .m6 { right: 40px; top: 50%; transform: translateY(-50%); }
+
+        /* 连接线特效 */
+        .connector {
+            position: absolute; top: 50%; left: 50%; width: 400px; height: 1px;
+            background: linear-gradient(90deg, var(--accent-gold), transparent);
+            transform-origin: left center; z-index: 1; opacity: 0.3;
+        }
+
+        /* 深度拆解：核心安全逻辑 (Deep Decomposition) */
+        .decomposition-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px;
+            margin-bottom: 50px;
+        }
+        .logic-card {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+            border-radius: 15px; padding: 30px; position: relative;
+        }
+        .logic-card::after {
+            content: ""; position: absolute; bottom: 0; right: 0; width: 40px; height: 40px;
+            background: linear-gradient(135deg, transparent 50%, var(--accent-blue) 50%);
+            border-radius: 0 0 15px 0;
+        }
+        .logic-card h3 { color: var(--accent-gold); font-size: 20px; margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px; }
+        .logic-card p { font-size: 14px; line-height: 1.6; color: var(--text-muted); margin-bottom: 15px; }
+        .logic-card ul { padding-left: 18px; font-size: 13px; color: #eee; }
+        .logic-card ul li { margin-bottom: 8px; }
+
+        /* 现状对比表 (Strategy Alignment) */
+        .alignment-table {
+            width: 100%; border-collapse: collapse; margin-bottom: 40px;
+            background: rgba(0,0,0,0.2); border-radius: 15px; overflow: hidden;
+        }
+        .alignment-table th { background: var(--accent-blue); padding: 18px; text-align: left; }
+        .alignment-table td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .pain-point { color: var(--warn-red); font-weight: bold; font-size: 14px; }
+        .solution-value { color: var(--safe-green); font-weight: bold; font-size: 14px; }
+
+        /* Summary */
+        .summary-bar {
+            background: linear-gradient(90deg, var(--accent-blue) 0%, transparent 100%);
+            padding: 25px; border-left: 6px solid var(--accent-gold); border-radius: 8px;
+        }
+        .summary-bar p { margin: 0; font-size: 16px; font-weight: 500; line-height: 1.5; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1><span>聚创云AI智算智造平台</span> | 详细方案设计</h1>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <span class="page-tag">P04</span>
+            <span style="font-weight: 600;">安全与架构层 - 模块化架构与弹性安全底座</span>
+        </div>
+    </div>
+
+    <div class="safety-infographic">
+        <div class="shield-core">
+            <i class="fas fa-shield-halved"></i>
+            <h3>弹性安全底座</h3>
+            <small style="opacity: 0.7;">ELASTIC FOUNDATION</small>
+        </div>
+
+        <div class="module-node m1">
+            <i class="fas fa-video"></i>
+            <div><b>AI 视觉联动插件</b><span>自动识别违规作业与穿戴</span></div>
+        </div>
+        <div class="module-node m2">
+            <i class="fas fa-lock"></i>
+            <div><b>闭环控制网关</b><span>杜绝“纸面闭锁”，物理验证确认</span></div>
+        </div>
+        <div class="module-node m3">
+            <i class="fas fa-network-wired"></i>
+            <div><b>系统解耦中间件</b><span>算法层故障不影响底座生产</span></div>
+        </div>
+        <div class="module-node m4">
+            <i class="fas fa-user-shield"></i>
+            <div><b>作业权限控制模块</b><span>高危作业双重生物特征核验</span></div>
+        </div>
+        <div class="module-node m5">
+            <i class="fas fa-vial-circle-check"></i>
+            <div><b>指令验证沙箱</b><span>AI代码下发前自动化仿真测试</span></div>
+        </div>
+        <div class="module-node m6">
+            <i class="fas fa-plug"></i>
+            <div><b>标准化接口池</b><span>屏蔽旧系统差异，平滑替换U8/BIP</span></div>
+        </div>
+    </div>
+
+    <div class="decomposition-grid">
+        <div class="logic-card">
+            <h3><i class="fas fa-cubes"></i> 高度解耦的模块化架构</h3>
+            <p>打破华糖传统“牵一发而动全身”的集成困局。通过标准接口封装，实现业务逻辑的“即插即用”。</p>
+            <ul>
+                <li><b>资产复用：</b> 将煮糖、中和等逻辑沉淀为标准组件，实现快速跨车间复制。</li>
+                <li><b>风险隔离：</b> 计算中台与底层DCS物理隔离，确保AI决策层即使出现逻辑偏差，也不会引发产线停车。</li>
+                <li><b>平滑演进：</b> 支持在不停机状态下对个别工段模块进行“热升级”。</li>
+            </ul>
+        </div>
+        <div class="logic-card">
+            <h3><i class="fas fa-eye"></i> 主动防御与安全闭环</h3>
+            <p>针对“纸面打钩”现状，通过AI视觉与工业网关强制建立“技术闭环”。</p>
+            <ul>
+                <li><b>视频AI联动：</b> 实时识别起重机械、高空作业、动火区域人员违规并秒级预警。</li>
+                <li><b>数据指纹核验：</b> 安全检查必须基于实时传感器（如气体浓度检测仪）回传数据，系统自动核验通过后方可开启下一步作业。</li>
+                <li><b>环保动态监测：</b> 污水站pH/厌氧菌指标与排污阀门逻辑联动，严防违规排放风险。</li>
+            </ul>
+        </div>
+        <div class="logic-card">
+            <h3><i class="fas fa-microchip"></i> 智算指令的确定性执行</h3>
+            <p>解决大模型指令“不可信”风险。为华糖量身打造的算法防火墙。</p>
+            <ul>
+                <li><b>语义边界检查：</b> 自动拦截超出生产安全范围（如真空度过高、温度超限）的AI优化算法。</li>
+                <li><b>安全沙箱仿真：</b> 每一段由AI生成的逻辑（如离心机动态洗水脚本）在执行前，必须在影子计算环境中通过边界压力测试。</li>
+                <li><b>可审计踪迹：</b> 每一条算法调优动作全留痕，确保事故责任可追溯。</li>
+            </ul>
+        </div>
+    </div>
+
+    <table class="alignment-table">
+        <thead>
+            <tr>
+                <th style="width: 20%;">管理维度</th>
+                <th style="width: 40%;">华糖现状痛点 (As-Is)</th>
+                <th style="width: 40%;">聚创云安全架构价值 (To-Be)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><b>安全作业管控</b></td>
+                <td class="pain-point">纸质打钩、不按规程作业；安全管控流于形式，事后补记。</td>
+                <td class="solution-value">建立“检测驱动”逻辑，不检测、不通过、不放行。AI视觉实现全天候“技防”替代“人防”。</td>
+            </tr>
+            <tr>
+                <td><b>系统集成稳定性</b></td>
+                <td class="pain-point">系统高度耦合，调整困难。缺乏针对AI代码下发的验证机制。</td>
+                <td class="solution-value">模块化解耦架构。提供“安全沙箱”运行环境，确保AI决策在安全边界内执行。</td>
+            </tr>
+            <tr>
+                <td><b>高风险场景监控</b></td>
+                <td class="pain-point">起重/动火依赖人工指挥。视频监控独立运行，无联动、无报警。</td>
+                <td class="solution-value">全场景AI视频联动。实现起重轨迹自动预警、动火作业实时审批与环境动态感知联控。</td>
+            </tr>
+            <tr>
+                <td><b>环保合规管理</b></td>
+                <td class="pain-point">传感器离散，纸质记录多，缺乏与现场生产逻辑的自动化闭环。</td>
+                <td class="solution-value">污水处理工艺算法模型化。实现与环保局数据同步的同时，在企业内部建立风险熔断机制。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="summary-bar">
+        <p><strong>核心总结：</strong> 聚创云提供的不仅是“计算能力”，更是一种“抗风险”的架构基因。我们通过模块化解耦和主动安全技术，为华糖搭建了一道数字化安全长城。它不仅解决了当前纸面管控的虚假繁荣，更让企业在迈向四级智能工厂的过程中，拥有了无感平替、安全演进与自主纠偏的确定性底座。</p>
+    </div>
+</div>
+
+</body>
+</html>

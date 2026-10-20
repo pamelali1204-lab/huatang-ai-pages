@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>华糖安全生产全景图 - P01</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --bg: #132668; --blue: #1567db; --gold: #ffc000; --text: #fff; --panel: rgba(255,255,255,0.05); }
+        body { background: var(--bg); color: var(--text); font-family: sans-serif; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { border-bottom: 2px solid var(--blue); padding-bottom: 10px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .explosion-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        .card { background: var(--panel); border: 1px solid var(--blue); border-radius: 12px; padding: 20px; position: relative; }
+        .card h3 { color: var(--gold); margin-top: 0; border-left: 5px solid var(--gold); padding-left: 10px; }
+        .badge { background: var(--gold); color: #000; font-weight: bold; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .comparison-table th { background: var(--blue); padding: 10px; font-size: 14px; }
+        .comparison-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
+        .highlight { color: var(--gold); font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>华糖安全生产数智化方案 | <span>P01：全域感知与资产数智化</span></h1>
+        <span class="badge">数字化四级标准</span>
+    </div>
+    <div class="explosion-grid">
+        <div class="card">
+            <h3><i class="fas fa-user-shield"></i> 人员合规动态监管</h3>
+            <p>● <b>全项劳保核验：</b>AI实时识别安全帽、披头散发、安全带（高空）、防毒面具/防护服（酸碱间）。</p>
+            <p>● <b>行为轨迹纠偏：</b>识别1号门广场人车分流违规，人员闯入车辆路径实时声光报警。</p>
+            <p>● <b>技术支撑：</b>利用大模型预训练数据集，误报率降低90%+。</p>
+        </div>
+        <div class="card">
+            <h3><i class="fas fa-boxes"></i> 离散资产线上化管理</h3>
+            <p>● <b>消防/公辅资产：</b>对200+罐区消防器材、风机、泵机进行RFID/二维码身份建模。</p>
+            <p>● <b>状态在线：</b>集成仪表读数OCR识别，变“纸质检查”为“自动采集+远程监控”。</p>
+            <p>● <b>空仓/液位监测：</b>料斗及生产罐液位计联动，异常状态秒级推送。</p>
+        </div>
+        <div class="card">
+            <h3><i class="fas fa-industry"></i> 生产运行安全监测</h3>
+            <p>● <b>粉尘与气体：</b>24小时监测粉尘浓度、酸雾碱雾及四种危险气体，实现传感器联网闭环。</p>
+            <p>● <b>皮带跑偏：</b>视觉识别输送皮带偏移，防止物料堆积引发的机械损伤或火灾隐患。</p>
+            <p>● <b>周界安防：</b>基于海康大模型周界摄像机，精准过滤小动物/树叶干扰，识别非法入侵。</p>
+        </div>
+    </div>
+    <table class="comparison-table">
+        <tr>
+            <th>管理维度</th>
+            <th>传统现状 (As-Is)</th>
+            <th>聚创云方案 (To-Be)</th>
+            <th>核心价值</th>
+        </tr>
+        <tr>
+            <td>记录方式</td>
+            <td>纸质记录，事后补记，存在“直接打钩”假象</td>
+            <td class="highlight">电子围栏+视觉算法自动存证，数据不可篡改</td>
+            <td>消除人为造假，提升合规性</td>
+        </tr>
+        <tr>
+            <td>监控利用</td>
+            <td>独立运行，仅作事故后人工回溯</td>
+            <td class="highlight">主动识别告警，联动PLC实现风险区域反控停机</td>
+            <td>从“事后看”到“事前管”</td>
+        </tr>
+        <tr>
+            <td>资产维护</td>
+            <td>定期人工检查，靠纸面台账提醒</td>
+            <td class="highlight">全量资产线上化，状态驱动维护周期</td>
+            <td>延长资产寿命，减少非计划停机</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

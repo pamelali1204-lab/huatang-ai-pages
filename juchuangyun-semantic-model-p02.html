@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>聚创云AI智算智造平台 - 软件定义业务模型</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #132668;       /* 品牌底色 */
+            --accent-blue: #1567db;   /* 高亮科技蓝 */
+            --accent-gold: #ffc000;   /* 高亮活力金 */
+            --panel-bg: rgba(21, 103, 219, 0.08);
+            --text-white: #ffffff;
+            --text-muted: #a0b2d3;
+            --border: rgba(21, 103, 219, 0.4);
+            --success: #00e676;
+        }
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-white);
+            font-family: 'Segoe UI', "Microsoft YaHei", sans-serif;
+            margin: 0; padding: 25px;
+            background-image: radial-gradient(circle at 20% 20%, rgba(21, 103, 219, 0.15) 0%, transparent 40%),
+                              radial-gradient(circle at 80% 80%, rgba(255, 192, 0, 0.05) 0%, transparent 40%);
+        }
+        .container { max-width: 1500px; margin: 0 auto; }
+        
+        /* Header */
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--accent-blue);
+            padding-bottom: 15px; margin-bottom: 35px;
+        }
+        .header h1 { font-size: 30px; margin: 0; font-weight: 700; }
+        .header h1 span { color: var(--accent-gold); }
+        .page-tag { background: var(--accent-gold); color: #000; padding: 3px 12px; font-size: 14px; font-weight: 800; border-radius: 4px; }
+
+        /* 爆炸图：语义转化引擎 (Explosion Diagram) */
+        .semantic-explosion {
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--panel-bg);
+            padding: 50px; border-radius: 24px;
+            border: 1px solid var(--border);
+            margin-bottom: 45px;
+            position: relative;
+        }
+        
+        /* 左侧：原子级数据 (Raw Inputs) */
+        .input-cloud { width: 300px; display: flex; flex-direction: column; gap: 15px; }
+        .input-item { 
+            background: rgba(255, 255, 255, 0.05); 
+            padding: 12px 18px; border-radius: 10px;
+            border-left: 4px solid var(--accent-blue);
+            font-size: 14px; color: var(--text-muted);
+        }
+        .input-item b { color: var(--text-white); display: block; }
+
+        /* 中间：语义注入内核 (Core) */
+        .core-engine {
+            width: 320px; height: 320px;
+            background: radial-gradient(circle, var(--accent-blue) 0%, transparent 70%);
+            border: 2px dashed var(--accent-gold);
+            border-radius: 50%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; position: relative;
+            animation: rotate 20s linear infinite;
+        }
+        .core-inner {
+            background: var(--bg-main);
+            width: 240px; height: 240px; border-radius: 50%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            box-shadow: 0 0 40px var(--accent-blue);
+            animation: counter-rotate 20s linear infinite;
+        }
+        .core-inner i { font-size: 60px; color: var(--accent-gold); margin-bottom: 15px; }
+        .core-inner h3 { margin: 0; color: var(--text-white); font-size: 20px; }
+
+        /* 右侧：业务灵魂输出 (Smart Models) */
+        .output-cloud { width: 350px; display: flex; flex-direction: column; gap: 20px; }
+        .output-card {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, rgba(21, 103, 219, 0.3) 100%);
+            padding: 18px; border-radius: 15px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .output-card::after {
+            content: '\f058'; font-family: "Font Awesome 6 Free"; font-weight: 900;
+            position: absolute; top: 10px; right: 15px; color: var(--accent-gold);
+        }
+        .output-card h4 { margin: 0 0 8px 0; color: var(--accent-gold); font-size: 17px; }
+        .output-card p { margin: 0; font-size: 13px; color: #eee; }
+
+        /* 深度拆解：模块化模型体系 (Deep Decomposition) */
+        .decomposition-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px;
+            margin-bottom: 50px;
+        }
+        .model-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 18px; padding: 25px;
+            position: relative; overflow: hidden;
+        }
+        .model-card::before {
+            content: ""; position: absolute; top: 0; left: 0; 
+            width: 100%; height: 5px; background: var(--accent-blue);
+        }
+        .model-card i { font-size: 35px; color: var(--accent-blue); margin-bottom: 20px; }
+        .model-card h3 { color: var(--accent-gold); margin-bottom: 15px; font-size: 20px; }
+        .model-card ul { padding-left: 20px; color: var(--text-muted); font-size: 14px; }
+        .model-card ul li { margin-bottom: 10px; }
+        .model-card ul li b { color: var(--text-white); }
+
+        /* 传统 vs 软件定义 对齐表 (Strategy Alignment) */
+        .comparison-table {
+            width: 100%; border-collapse: collapse; margin-bottom: 40px;
+            border-radius: 15px; overflow: hidden;
+        }
+        .comparison-table th { background: var(--accent-blue); padding: 18px; text-align: left; font-size: 18px; }
+        .comparison-table td { background: rgba(255,255,255,0.05); padding: 20px; border-bottom: 1px solid var(--border); }
+        .vs-tag { display: inline-block; padding: 4px 10px; background: var(--accent-gold); color: #000; font-weight: bold; border-radius: 5px; margin: 0 15px; }
+
+        /* Summary */
+        .summary-footer {
+            background: linear-gradient(90deg, var(--accent-blue) 0%, transparent 100%);
+            padding: 20px 30px; border-left: 6px solid var(--accent-gold);
+            border-radius: 0 10px 10px 0;
+        }
+        .summary-footer p { margin: 0; font-size: 16px; line-height: 1.6; }
+
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes counter-rotate { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1><span>聚创云AI智算智造平台</span> | 详细方案设计</h1>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <span class="page-tag">P02</span>
+            <span style="font-weight: 600;">中层：语义层 - 软件定义业务模型</span>
+        </div>
+    </div>
+
+    <div class="semantic-explosion">
+        <div class="input-cloud">
+            <div class="input-item"><b>[DCS] 实时采集项</b>温度、压力、真空度、流量</div>
+            <div class="input-item"><b>[MES] 过程反馈项</b>Brix浓度、离心转速、pH实时值</div>
+            <div class="input-item"><b>[QMS] 质量输入项</b>原糖色值、还原糖分、灰分含量</div>
+            <p style="font-size: 12px; color: var(--accent-gold); text-align: center;"><i class="fas fa-arrow-right"></i> 原始、碎片的“冷数据”</p>
+        </div>
+
+        <div class="core-engine">
+            <div class="core-inner">
+                <i class="fas fa-brain"></i>
+                <h3>语义转化内核</h3>
+                <p style="font-size: 12px; opacity: 0.7;">CONTEXT INJECTION</p>
+                <small style="color: var(--accent-gold);">专家经验模型化</small>
+            </div>
+        </div>
+
+        <div class="output-cloud">
+            <div class="output-card">
+                <h4>过饱和度 (SS) 实时模型</h4>
+                <p>整合温度、浓度与机理系数，动态判定煮糖介稳区，精准定位投粉点。</p>
+            </div>
+            <div class="output-card">
+                <h4>动态粘度控制指标</h4>
+                <p>基于原糖分级与溶糖温控，生成最优泵送与过滤流速预判值。</p>
+            </div>
+            <div class="output-card">
+                <h4>糖分收率风险预警</h4>
+                <p>自动关联灰分与澄清效果，实时计算不明糖分流失风险概率。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="decomposition-grid">
+        <div class="model-card">
+            <i class="fas fa-cubes"></i>
+            <h3>多维动态 BOM 模型</h3>
+            <ul>
+                <li><b>解耦传统架构：</b> 摆脱静态重量BOM限制。</li>
+                <li><b>成分感知：</b> 实时注入<b>原糖纯度</b>与<b>灰分</b>特征。</li>
+                <li><b>按质排产：</b> 基于原料色值(2000以上/以下)自动调整辅料添加策略。</li>
+            </ul>
+        </div>
+        <div class="model-card">
+            <i class="fas fa-microscope"></i>
+            <h3>核心工艺机理模型</h3>
+            <ul>
+                <li><b>结晶全生命周期：</b> 定义投种点、育晶期、生长期各阶段逻辑。</li>
+                <li><b>专家经验资产化：</b> 将“拉线看样”转化为过饱和度、晶体密度的数字指标。</li>
+                <li><b>反控指令生成：</b> 将语义决策转化为PLC可执行的<b>阀门/转速设定值</b>。</li>
+            </ul>
+        </div>
+        <div class="model-card">
+            <i class="fas fa-bolt"></i>
+            <h3>能效平衡预测模型</h3>
+            <ul>
+                <li><b>热力学耦合：</b> 建立蒸汽压力与蒸发效能的语义关联。</li>
+                <li><b>结垢趋势分析：</b> 基于传热系数模型，智能预判三效/五效蒸发罐清洗周期。</li>
+                <li><b>单产电耗模型：</b> 细化到单台离心机的洗水能效评估。</li>
+            </ul>
+        </div>
+    </div>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th style="width: 45%;">传统数据架构 (华糖现状)</th>
+                <th style="width: 10%; text-align: center;">演进</th>
+                <th style="width: 45%;">软件定义模型 (聚创云方案)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><b>结构硬编码：</b> 业务逻辑死板地写在数据库表结构中，调整一个“煮糖规则”需要大规模停机改码。</td>
+                <td style="text-align: center;"><span class="vs-tag">UP</span></td>
+                <td><b>逻辑解耦：</b> 数据库只存底层数字，上层模型负责定义含义。<b>规则调整仅需分钟级配置</b>，无需改动底层底座。</td>
+            </tr>
+            <tr>
+                <td><b>语义缺失：</b> 数据只是冰冷的“85.2℃”，AI不知道这是溶糖的高温预警还是结晶的正常参数。</td>
+                <td style="text-align: center;"><span class="vs-tag">UP</span></td>
+                <td><b>上下文注入：</b> 模型不仅包含数据，还包含<b>物理约束、专家手册、行业标准</b>。让AI真正“理解”生产过程。</td>
+            </tr>
+            <tr>
+                <td><b>物理汇聚：</b> 必须把所有数据拉到一个表里才能分析，导致数据冗余与同步失败。</td>
+                <td style="text-align: center;"><span class="vs-tag">UP</span></td>
+                <td><b>虚拟化访问：</b> 直接定义模型视角，通过计算服务平台实时调用各系统接口，实现<b>“数随心动”</b>。</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="summary-footer">
+        <p><strong>核心总结：</strong> 语义层是赋予华糖数据“业务灵魂”的关键。我们通过软件定义模型，将碎片化的工业参数转化为具有高语境、高价值的<b>特征资产</b>。这不仅解决了 AI 对生产流程的理解障碍，更为实现结晶自动投种、蒸发智能除垢等“数字化四级”核心应用提供了确定性的逻辑底座。</p>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标准规范深度拆解 - 华糖场景</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0f1f52;
+            --bg-deep: #0a1438;
+            --accent-blue: #1567db;
+            --accent-gold: #ffc000;
+            --text-soft: #a8bddc;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: #fff;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background:
+                radial-gradient(ellipse 120% 80% at 10% -20%, rgba(21, 103, 219, 0.35), transparent 50%),
+                radial-gradient(ellipse 80% 60% at 100% 30%, rgba(255, 192, 0, 0.08), transparent 45%),
+                linear-gradient(165deg, var(--bg-deep) 0%, var(--bg-main) 40%, #152a6e 100%);
+            padding: 32px 20px 48px;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        /* 页眉：纯排版，弱分割 */
+        .hero {
+            margin-bottom: 48px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .hero-kicker {
+            font-size: 12px;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .hero h1 {
+            margin: 0 0 16px 0;
+            font-size: clamp(22px, 4vw, 32px);
+            font-weight: 700;
+            line-height: 1.35;
+            max-width: 920px;
+        }
+        .hero h1 span { color: var(--accent-gold); }
+        .hero-meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text-soft);
+        }
+        .hero-meta::before {
+            content: "";
+            width: 36px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), transparent);
+        }
+
+        /* 四大支柱：左侧光轨 + 节点，无卡片边框 */
+        .pillars { position: relative; margin-bottom: 56px; padding-left: 8px; }
+        .pillars-rail {
+            position: absolute;
+            left: 22px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: linear-gradient(
+                180deg,
+                var(--accent-gold) 0%,
+                rgba(21, 103, 219, 0.6) 35%,
+                rgba(21, 103, 219, 0.25) 100%
+            );
+            border-radius: 2px;
+            opacity: 0.85;
+        }
+        .pillar {
+            position: relative;
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 20px 24px;
+            margin-bottom: 36px;
+            padding-left: 4px;
+        }
+        .pillar:last-child { margin-bottom: 0; }
+        .pillar-node {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.06);
+            border: 2px solid rgba(255, 192, 0, 0.65);
+            box-shadow: 0 0 24px rgba(21, 103, 219, 0.35);
+            z-index: 1;
+        }
+        .pillar-node i { font-size: 18px; color: var(--accent-gold); }
+        .pillar-body { padding-top: 2px; }
+        .pillar-body h2 {
+            margin: 0 0 14px 0;
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        .pillar-body ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .pillar-body li {
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.55;
+            color: var(--text-soft);
+        }
+        .pillar-body li:last-child { margin-bottom: 0; }
+        .pillar-body li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.55em;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            opacity: 0.9;
+        }
+        .pillar-body b { color: #fff; font-weight: 600; }
+
+        /* 闭环流程：底纹带 + 圆标，无外框 */
+        .flow-section { margin-bottom: 52px; }
+        .flow-title {
+            text-align: center;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin: 0 0 28px 0;
+            letter-spacing: 0.06em;
+        }
+        .flow-track {
+            position: relative;
+            padding: 28px 12px 20px;
+            border-radius: 999px;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(21, 103, 219, 0.18) 20%,
+                rgba(21, 103, 219, 0.22) 50%,
+                rgba(21, 103, 219, 0.18) 80%,
+                transparent 100%
+            );
+        }
+        .flow-track::before {
+            content: "";
+            position: absolute;
+            left: 8%;
+            right: 8%;
+            top: 50%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 192, 0, 0.35), transparent);
+            transform: translateY(-18px);
+            pointer-events: none;
+        }
+        .flow-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 8px 4px;
+            position: relative;
+            z-index: 1;
+        }
+        .flow-cell {
+            flex: 1 1 140px;
+            max-width: 200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .flow-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.12), rgba(21, 103, 219, 0.35));
+            border: 1px solid rgba(255, 192, 0, 0.25);
+        }
+        .flow-icon i { font-size: 26px; color: var(--accent-gold); }
+        .flow-cell p { margin: 0; font-size: 13px; line-height: 1.45; color: var(--text-soft); }
+        .flow-cell p b { color: #fff; display: block; margin-bottom: 6px; font-size: 14px; }
+        .flow-cell .sub { font-size: 12px; opacity: 0.82; }
+        .flow-connector {
+            flex: 0 0 28px;
+            align-self: center;
+            padding-top: 20px;
+            color: rgba(255, 192, 0, 0.45);
+            font-size: 18px;
+        }
+        @media (max-width: 720px) {
+            .flow-track { border-radius: 24px; }
+            .flow-track::before { display: none; }
+            .flow-row { flex-direction: column; align-items: stretch; }
+            .flow-cell { max-width: none; }
+            .flow-connector {
+                transform: rotate(90deg);
+                padding: 4px 0;
+                margin: 0 auto;
+            }
+        }
+
+        /* 价值陈述：引语式，无实心色块框 */
+        .value-quote {
+            text-align: center;
+            padding: 32px 8px 8px;
+            border-top: 2px solid rgba(255, 192, 0, 0.45);
+        }
+        .value-quote::before {
+            content: "“";
+            display: block;
+            font-size: 56px;
+            line-height: 0.4;
+            color: rgba(255, 192, 0, 0.35);
+            font-family: Georgia, serif;
+            margin-bottom: 8px;
+        }
+        .value-quote p {
+            margin: 0 auto;
+            max-width: 820px;
+            font-size: clamp(15px, 2.5vw, 18px);
+            line-height: 1.65;
+            font-weight: 600;
+            color: #e8eef8;
+        }
+        .value-quote .gold { color: var(--accent-gold); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="hero">
+        <div class="hero-kicker">场景化深度拆解</div>
+        <h1><span>标准规范</span> | 从「记录资产」向「计算特征」的深度重构</h1>
+        <div class="hero-meta">业务 · 模型 · 技术 · 算法 — 时间轴 + 流程带串联</div>
+    </header>
+
+    <section class="pillars" aria-label="标准的四大支柱">
+        <div class="pillars-rail" aria-hidden="true"></div>
+
+        <article class="pillar">
+            <div class="pillar-node"><i class="fas fa-flask" aria-hidden="true"></i></div>
+            <div class="pillar-body">
+                <h2>1. 业务逻辑标准</h2>
+                <ul>
+                    <li><b>制糖工艺：</b>定义各工段（如饱充pH调节）的最优波动范围与报警阈值。</li>
+                    <li><b>逻辑闭环：</b>规范「异常发生 → 模型分析 → 自动反馈」的逻辑触发规则。</li>
+                    <li><b>SOP 内嵌：</b>将老师傅的「拉线看样」经验标准化为<b>数字指令集</b>。</li>
+                </ul>
+            </div>
+        </article>
+
+        <article class="pillar">
+            <div class="pillar-node"><i class="fas fa-database" aria-hidden="true"></i></div>
+            <div class="pillar-body">
+                <h2>2. 数据模型标准</h2>
+                <ul>
+                    <li><b>语义化定义：</b>统一「Brix」「真空度」「沙位」在全平台计算中的语义权重。</li>
+                    <li><b>特征库构建：</b>建立面向 AI 算法的<b>1000+ 项标准化特征库</b>，包括时序动态特征。</li>
+                    <li><b>物料平衡：</b>规范原糖、回溶糖浆、成品糖之间的数字化关联准则。</li>
+                </ul>
+            </div>
+        </article>
+
+        <article class="pillar">
+            <div class="pillar-node"><i class="fas fa-project-diagram" aria-hidden="true"></i></div>
+            <div class="pillar-body">
+                <h2>3. 技术集成标准</h2>
+                <ul>
+                    <li><b>万物互联：</b>规范 Modbus / OPC / MQTT 等工业协议的<b>标签命名与测点规范</b>。</li>
+                    <li><b>API 治理：</b>统一各子系统对外暴露的接口协议（RESTful / gRPC）标准。</li>
+                    <li><b>安全边界：</b>定义数据计算服务平台与底层控制网关之间的<b>通讯安全准则</b>。</li>
+                </ul>
+            </div>
+        </article>
+
+        <article class="pillar">
+            <div class="pillar-node"><i class="fas fa-brain" aria-hidden="true"></i></div>
+            <div class="pillar-body">
+                <h2>4. 算法评估标准</h2>
+                <ul>
+                    <li><b>即插即用：</b>规范算法模型的封装容器与输入输出参数映射表。</li>
+                    <li><b>效果评估：</b>建立结晶收率优化、能耗降低幅度的<b>在线量化评价模型</b>。</li>
+                    <li><b>全生命周期：</b>定义算法从训练、测试、发布到在线监控的标准流程。</li>
+                </ul>
+            </div>
+        </article>
+    </section>
+
+    <section class="flow-section" aria-label="标准化闭环">
+        <h3 class="flow-title">标准化闭环：数据如何转化为「决策特征」</h3>
+        <div class="flow-track">
+            <div class="flow-row">
+                <div class="flow-cell">
+                    <div class="flow-icon"><i class="fas fa-microchip" aria-hidden="true"></i></div>
+                    <p><b>原始数据</b><span class="sub">DCS 传感器<br>85.2℃ / 70% Brix</span></p>
+                </div>
+                <div class="flow-connector" aria-hidden="true"><i class="fas fa-chevron-right"></i></div>
+                <div class="flow-cell">
+                    <div class="flow-icon"><i class="fas fa-file-invoice" aria-hidden="true"></i></div>
+                    <p><b>技术标准处理</b><span class="sub">协议解析、数据清洗<br>统一命名空间</span></p>
+                </div>
+                <div class="flow-connector" aria-hidden="true"><i class="fas fa-chevron-right"></i></div>
+                <div class="flow-cell">
+                    <div class="flow-icon"><i class="fas fa-dna" aria-hidden="true"></i></div>
+                    <p><b>模型标准转化</b><span class="sub">语义注入：<b style="color:#fff">计算过饱和度(SS)</b><br>构建 AI 输入向量</span></p>
+                </div>
+                <div class="flow-connector" aria-hidden="true"><i class="fas fa-chevron-right"></i></div>
+                <div class="flow-cell">
+                    <div class="flow-icon"><i class="fas fa-lightbulb" aria-hidden="true"></i></div>
+                    <p><b>算法标准输出</b><span class="sub">调用 AaaS 服务<br><b style="color:#fff">下达自动投粉指令</b></span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="value-quote">
+        <p>核心价值：标准规范是实现<span class="gold">「规则即指令」</span>的可靠路径，也是华糖从信息化迈向真正智能化的<span class="gold">语言中枢</span>。</p>
+    </footer>
+</div>
+
+</body>
+</html>
