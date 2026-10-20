@@ -1,0 +1,2943 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>故障描述-华糖AI</title>
+
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      --bg-app: #0f0f0f;
+      --bg-header: #141414;
+      --bg-panel: #1a1a1a;
+      --bg-table: #141414;
+      --bg-row-hover: #1f1f1f;
+
+      --border: #303030;
+      --border-soft: #252525;
+
+      --text: #e8e8e8;
+      --text-muted: #8c8c8c;
+      --text-secondary: #bfbfbf;
+
+      --primary: #1677ff;
+      --primary-hover: #4096ff;
+
+      --success: #389e0d;
+      --success-hover: #52c41a;
+
+      --warning: #d46b08;
+      --warning-hover: #fa8c16;
+
+      --danger: #cf1322;
+      --danger-hover: #ff4d4f;
+
+      --info: #0958d9;
+      --link: #69b1ff;
+      --tab-active: #1677ff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "PingFang SC",
+        "Hiragino Sans GB",
+        "Microsoft YaHei",
+        sans-serif;
+
+      background: var(--bg-app);
+      color: var(--text);
+
+      font-size: 13px;
+      line-height: 1.5;
+
+      min-height: 100vh;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 顶部栏 */
+    .top-bar {
+      height: 40px;
+
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 16px;
+
+      flex-shrink: 0;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+
+      gap: 6px;
+
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .breadcrumb a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--link);
+    }
+
+    .breadcrumb .sep {
+      color: #595959;
+    }
+
+    .breadcrumb .current {
+      color: var(--text-secondary);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+
+      gap: 14px;
+
+      color: var(--text-secondary);
+    }
+
+    .top-actions i {
+      font-size: 14px;
+      cursor: pointer;
+      opacity: 0.85;
+    }
+
+    .top-actions i:hover {
+      color: var(--link);
+      opacity: 1;
+    }
+
+    .avatar {
+      width: 26px;
+      height: 26px;
+
+      border-radius: 50%;
+
+      background: linear-gradient(135deg, #595959, #262626);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 11px;
+      color: #fff;
+
+      cursor: pointer;
+    }
+
+    /* 页面页签 */
+    .page-tabs {
+      height: 36px;
+
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border);
+
+      display: flex;
+      align-items: flex-end;
+
+      padding: 0 12px;
+
+      flex-shrink: 0;
+
+      gap: 2px;
+    }
+
+    .page-tab {
+      height: 30px;
+
+      padding: 0 14px;
+
+      display: flex;
+      align-items: center;
+
+      gap: 8px;
+
+      background: #1f1f1f;
+
+      border: 1px solid var(--border);
+      border-bottom: none;
+
+      border-radius: 4px 4px 0 0;
+
+      color: var(--text-secondary);
+
+      font-size: 12px;
+
+      cursor: default;
+    }
+
+    .page-tab.active {
+      background: var(--bg-app);
+      color: var(--text);
+
+      position: relative;
+    }
+
+    .page-tab.active::before {
+      content: "";
+
+      width: 6px;
+      height: 6px;
+
+      border-radius: 50%;
+
+      background: var(--tab-active);
+
+      display: inline-block;
+    }
+
+    .page-tab .close {
+      font-size: 10px;
+      opacity: 0.5;
+      cursor: pointer;
+    }
+
+    .page-tab .close:hover {
+      opacity: 1;
+      color: var(--danger-hover);
+    }
+
+    /* 主体 */
+    .main {
+      flex: 1;
+
+      padding: 12px;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 10px;
+
+      min-height: 0;
+    }
+
+    .panel {
+      background: var(--bg-panel);
+
+      border: 1px solid var(--border);
+      border-radius: 2px;
+    }
+
+    /* 查询区 */
+    .query-panel {
+      padding: 12px 14px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 12px;
+
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      gap: 6px;
+
+      height: 30px;
+
+      padding: 0 14px;
+
+      border: none;
+      border-radius: 2px;
+
+      font-size: 13px;
+
+      cursor: pointer;
+
+      color: #fff;
+
+      white-space: nowrap;
+
+      transition:
+        background 0.15s,
+        opacity 0.15s;
+
+      font-family: inherit;
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-ghost {
+      background: transparent;
+
+      border: 1px solid #595959;
+
+      color: var(--text);
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      border-color: var(--primary);
+      color: var(--link);
+    }
+
+    .btn-default {
+      background: #434343;
+
+      border: 1px solid #595959;
+
+      color: var(--text);
+    }
+
+    .btn-default:hover:not(:disabled) {
+      background: #595959;
+    }
+
+    .btn-warning {
+      background: var(--warning);
+    }
+
+    .btn-warning:hover:not(:disabled) {
+      background: var(--warning-hover);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    .btn-info {
+      background: var(--info);
+    }
+
+    .btn-info:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    .btn-success {
+      background: var(--success);
+    }
+
+    .btn-success:hover:not(:disabled) {
+      background: var(--success-hover);
+    }
+
+    .btn-cyan {
+      background: #13c2c2;
+    }
+
+    .btn-cyan:hover:not(:disabled) {
+      background: #36cfc9;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background: var(--danger-hover);
+    }
+
+    .query-actions {
+      display: flex;
+      gap: 8px;
+
+      flex-wrap: wrap;
+    }
+
+    /* 数据区 */
+    .data-panel {
+      flex: 1;
+
+      display: flex;
+      flex-direction: column;
+
+      min-height: 0;
+
+      overflow: hidden;
+    }
+
+    .data-tabs {
+      display: flex;
+      align-items: center;
+
+      border-bottom: 1px solid var(--border);
+
+      padding: 0 12px;
+
+      height: 40px;
+
+      gap: 0;
+
+      flex-shrink: 0;
+    }
+
+    .data-tab {
+      height: 40px;
+
+      padding: 0 16px;
+
+      display: flex;
+      align-items: center;
+
+      color: var(--text-secondary);
+
+      cursor: pointer;
+
+      border-bottom: 2px solid transparent;
+
+      margin-bottom: -1px;
+
+      user-select: none;
+    }
+
+    .data-tab:hover {
+      color: var(--link);
+    }
+
+    .data-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+
+      font-weight: 500;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 10px 12px;
+
+      border-bottom: 1px solid var(--border-soft);
+
+      flex-shrink: 0;
+    }
+
+    .toolbar-left {
+      display: flex;
+      gap: 8px;
+    }
+
+    .toolbar-right {
+      display: flex;
+
+      gap: 12px;
+
+      color: var(--text-muted);
+    }
+
+    .toolbar-right i {
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .toolbar-right i:hover {
+      color: var(--link);
+    }
+
+    .table-wrap {
+      flex: 1;
+
+      overflow: auto;
+
+      min-height: 0;
+    }
+
+    table {
+      width: 100%;
+
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    thead {
+      position: sticky;
+
+      top: 0;
+
+      z-index: 2;
+    }
+
+    th {
+      background: #1f1f1f;
+
+      color: var(--text-secondary);
+
+      font-weight: 500;
+
+      text-align: left;
+
+      padding: 10px 12px;
+
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border-soft);
+
+      white-space: nowrap;
+
+      user-select: none;
+    }
+
+    th:last-child {
+      border-right: none;
+    }
+
+    th .th-inner {
+      display: inline-flex;
+      align-items: center;
+
+      gap: 6px;
+
+      cursor: pointer;
+    }
+
+    th .sort {
+      display: inline-flex;
+      flex-direction: column;
+
+      font-size: 8px;
+      line-height: 1;
+
+      color: #595959;
+
+      gap: 1px;
+    }
+
+    th .sort .up.active,
+    th .sort .down.active {
+      color: var(--primary);
+    }
+
+    td {
+      padding: 9px 12px;
+
+      border-bottom: 1px solid var(--border-soft);
+      border-right: 1px solid var(--border-soft);
+
+      color: var(--text);
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      background: var(--bg-table);
+    }
+
+    td:last-child {
+      border-right: none;
+    }
+
+    tbody tr:hover td {
+      background: var(--bg-row-hover);
+    }
+
+    tbody tr.selected td {
+      background: #111d2c;
+    }
+
+    .col-check {
+      width: 48px;
+      text-align: center;
+    }
+
+    input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+
+      accent-color: var(--primary);
+
+      cursor: pointer;
+    }
+
+    .link-code {
+      color: var(--link);
+
+      cursor: pointer;
+
+      text-decoration: none;
+    }
+
+    .link-code:hover {
+      text-decoration: underline;
+    }
+
+    .empty-cell {
+      color: var(--text-muted);
+    }
+
+    .view-pane {
+      display: none;
+
+      flex: 1;
+      flex-direction: column;
+
+      min-height: 0;
+    }
+
+    .view-pane.active {
+      display: flex;
+    }
+
+    .history-empty {
+      flex: 1;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      color: var(--text-muted);
+
+      flex-direction: column;
+
+      gap: 10px;
+
+      padding: 40px;
+    }
+
+    .history-empty i {
+      font-size: 36px;
+      opacity: 0.35;
+    }
+
+    /* 弹窗 */
+    .modal-mask {
+      position: fixed;
+
+      inset: 0;
+
+      background: rgba(0, 0, 0, 0.55);
+
+      display: none;
+      align-items: center;
+      justify-content: center;
+
+      z-index: 1000;
+
+      padding: 20px;
+    }
+
+    .modal-mask.show {
+      display: flex;
+    }
+
+    .modal {
+      background: #1f1f1f;
+
+      border: 1px solid var(--border);
+      border-radius: 4px;
+
+      width: 100%;
+      max-width: 520px;
+
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 14px 18px;
+
+      border-bottom: 1px solid var(--border);
+
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .modal-header .close-btn {
+      background: none;
+      border: none;
+
+      color: var(--text-muted);
+
+      cursor: pointer;
+
+      font-size: 16px;
+    }
+
+    .modal-header .close-btn:hover {
+      color: var(--text);
+    }
+
+    .modal-body {
+      padding: 20px 18px;
+    }
+
+    .form-row {
+      display: flex;
+      flex-direction: column;
+
+      gap: 6px;
+
+      margin-bottom: 16px;
+    }
+
+    .form-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-row label {
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .form-row label .req {
+      color: var(--danger-hover);
+      margin-right: 2px;
+    }
+
+    .form-row input,
+    .form-row textarea,
+    .form-row select {
+      background: #141414;
+
+      border: 1px solid #434343;
+      border-radius: 2px;
+
+      color: var(--text);
+
+      padding: 7px 10px;
+
+      font-size: 13px;
+
+      font-family: inherit;
+
+      outline: none;
+
+      width: 100%;
+    }
+
+    .form-row input:focus,
+    .form-row textarea:focus,
+    .form-row select:focus {
+      border-color: var(--primary);
+    }
+
+    .form-row textarea {
+      resize: vertical;
+      min-height: 72px;
+    }
+
+    .form-row input:disabled {
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+
+    .modal-footer {
+      padding: 12px 18px;
+
+      border-top: 1px solid var(--border);
+
+      display: flex;
+      justify-content: flex-end;
+
+      gap: 8px;
+    }
+
+    .toast {
+      position: fixed;
+
+      top: 56px;
+      left: 50%;
+
+      transform: translateX(-50%) translateY(-12px);
+
+      background: #1f1f1f;
+
+      border: 1px solid var(--border);
+
+      color: var(--text);
+
+      padding: 10px 18px;
+
+      border-radius: 4px;
+
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      transition:
+        opacity 0.2s,
+        transform 0.2s;
+
+      z-index: 1100;
+
+      font-size: 13px;
+
+      display: flex;
+      align-items: center;
+
+      gap: 8px;
+    }
+
+    .toast.show {
+      opacity: 1;
+
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.ok i {
+      color: var(--success-hover);
+    }
+
+    .toast.warn i {
+      color: var(--warning-hover);
+    }
+
+    .toast.err i {
+      color: var(--danger-hover);
+    }
+
+    .footer-bar {
+      height: 36px;
+
+      border-top: 1px solid var(--border-soft);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 14px;
+
+      color: var(--text-muted);
+
+      font-size: 12px;
+
+      flex-shrink: 0;
+
+      background: var(--bg-panel);
+    }
+
+    @media (max-width: 768px) {
+      .query-panel {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .query-actions {
+        justify-content: flex-start;
+      }
+
+      th,
+      td {
+        padding: 8px 8px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="top-bar">
+  <nav class="breadcrumb" aria-label="面包屑">
+
+    <a href="#">首页</a>
+
+    <span class="sep">/</span>
+
+    <a href="#">资料管理</a>
+
+    <span class="sep">/</span>
+
+    <a href="#">设备基础资料</a>
+
+    <span class="sep">/</span>
+
+    <span class="current">故障描述</span>
+
+  </nav>
+
+  <div class="top-actions">
+
+    <i class="fa-solid fa-magnifying-glass" title="搜索"></i>
+
+    <i class="fa-solid fa-expand" title="全屏"></i>
+
+    <i class="fa-regular fa-sun" title="主题"></i>
+
+    <i class="fa-solid fa-language" title="语言"></i>
+
+    <i class="fa-solid fa-text-height" title="字号"></i>
+
+    <div class="avatar" title="当前用户">管</div>
+
+  </div>
+</header>
+
+
+<div class="page-tabs">
+
+  <div class="page-tab active">
+
+    故障描述
+
+    <i class="fa-solid fa-xmark close" title="关闭"></i>
+
+  </div>
+
+</div>
+
+
+<main class="main">
+
+  <section class="panel query-panel">
+
+    <button
+      type="button"
+      class="btn btn-ghost"
+      id="btnAdvanced"
+    >
+      <i class="fa-solid fa-sliders"></i>
+      高级查询配置
+    </button>
+
+
+    <div class="query-actions">
+
+      <button
+        type="button"
+        class="btn btn-default"
+        id="btnClearAll"
+      >
+        全部清空
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-warning"
+        id="btnReset"
+      >
+        重置表单
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        id="btnQuery"
+      >
+        数据查询
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-info"
+        id="btnHistoryQuery"
+      >
+        履历查询
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <section class="panel data-panel">
+
+    <div class="data-tabs">
+
+      <div
+        class="data-tab active"
+        data-view="table"
+      >
+        表格数据
+      </div>
+
+      <div
+        class="data-tab"
+        data-view="history"
+      >
+        履历数据
+      </div>
+
+    </div>
+
+
+    <div
+      class="view-pane active"
+      id="viewTable"
+    >
+
+      <div class="toolbar">
+
+        <div class="toolbar-left">
+
+          <button
+            type="button"
+            class="btn btn-success"
+            id="btnAdd"
+          >
+            <i class="fa-solid fa-plus"></i>
+            新增
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-cyan"
+            id="btnEdit"
+            disabled
+          >
+            <i class="fa-solid fa-pen"></i>
+            编辑
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-danger"
+            id="btnDelete"
+            disabled
+          >
+            <i class="fa-solid fa-trash"></i>
+            删除
+          </button>
+
+        </div>
+
+
+        <div class="toolbar-right">
+
+          <i
+            class="fa-solid fa-magnifying-glass"
+            id="btnTableSearch"
+            title="搜索"
+          ></i>
+
+          <i
+            class="fa-solid fa-rotate-right"
+            id="btnRefresh"
+            title="刷新"
+          ></i>
+
+        </div>
+
+      </div>
+
+
+      <div class="table-wrap">
+
+        <table>
+
+          <colgroup>
+            <col style="width:48px">
+            <col style="width:130px">
+            <col style="width:220px">
+            <col style="width:130px">
+            <col style="width:160px">
+            <col style="width:160px">
+            <col style="width:110px">
+            <col style="width:170px">
+            <col style="width:110px">
+            <col style="width:170px">
+          </colgroup>
+
+
+          <thead>
+
+            <tr>
+
+              <th class="col-check">
+                <input
+                  type="checkbox"
+                  id="checkAll"
+                  title="全选"
+                >
+              </th>
+
+
+              <th data-key="code">
+
+                <span class="th-inner">
+
+                  故障描述编码
+
+                  <span class="sort">
+
+                    <i class="fa-solid fa-caret-up up"></i>
+
+                    <i class="fa-solid fa-caret-down down"></i>
+
+                  </span>
+
+                </span>
+
+              </th>
+
+
+              <th data-key="description">
+
+                <span class="th-inner">
+
+                  故障描述
+
+                  <span class="sort">
+
+                    <i class="fa-solid fa-caret-up up"></i>
+
+                    <i class="fa-solid fa-caret-down down"></i>
+
+                  </span>
+
+                </span>
+
+              </th>
+
+
+              <th data-key="faultTypeCode">
+
+                <span class="th-inner">
+
+                  故障类型编码
+
+                  <span class="sort">
+
+                    <i class="fa-solid fa-caret-up up"></i>
+
+                    <i class="fa-solid fa-caret-down down"></i>
+
+                  </span>
+
+                </span>
+
+              </th>
+
+
+              <th data-key="faultTypeName">
+
+                <span class="th-inner">
+
+                  故障类型描述
+
+                  <span class="sort">
+
+                    <i class="fa-solid fa-caret-up up"></i>
+
+                    <i class="fa-solid fa-caret-down down"></i>
+
+                  </span>
+
+                </span>
+
+              </th>
+
+
+              <th data-key="remark">
+
+                <span class="th-inner">
+
+                  备注
+
+                  <span class="sort">
+
+                    <i class="fa-solid fa-caret-up up"></i>
+
+                    <i class="fa-solid fa-caret-down down"></i>
+
+                  </span>
+
+                </span>
+
+              </th>
+
+
+              <th data-key="createUser">
+
+                <span class="th-inner">
+
+                  创建用户
+
+                  <span class="sort">
+
+                    <i class="fa-solid fa-caret-up up"></i>
+
+                    <i class="fa-solid fa-caret-down down"></i>
+
+                  </span>
+
+                </span>
+
+              </th>
+
+
+              <th data-key="createTime">
+
+                <span class="th-inner">
+
+                  创建时间
+
+                  <span class="sort">
+
+                    <i class="fa-solid fa-caret-up up"></i>
+
+                    <i class="fa-solid fa-caret-down down"></i>
+
+                  </span>
+
+                </span>
+
+              </th>
+
+
+              <th data-key="updateUser">
+
+                <span class="th-inner">
+
+                  修改用户
+
+                  <span class="sort">
+
+                    <i class="fa-solid fa-caret-up up"></i>
+
+                    <i class="fa-solid fa-caret-down down"></i>
+
+                  </span>
+
+                </span>
+
+              </th>
+
+
+              <th data-key="updateTime">
+
+                <span class="th-inner">
+
+                  修改时间
+
+                  <span class="sort">
+
+                    <i class="fa-solid fa-caret-up up"></i>
+
+                    <i class="fa-solid fa-caret-down down"></i>
+
+                  </span>
+
+                </span>
+
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="tableBody"></tbody>
+
+        </table>
+
+      </div>
+
+
+      <div class="footer-bar">
+
+        <span id="rowSummary">
+          共 0 条
+        </span>
+
+        <span>
+          设备故障描述维护
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="view-pane"
+      id="viewHistory"
+    >
+
+      <div class="history-empty">
+
+        <i class="fa-regular fa-clock"></i>
+
+        <div>
+          请先点击「履历查询」加载履历数据
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- 新增 / 编辑弹窗 -->
+<div
+  class="modal-mask"
+  id="editModal"
+  role="dialog"
+  aria-modal="true"
+>
+
+  <div class="modal">
+
+    <div class="modal-header">
+
+      <span id="modalTitle">
+        新增故障描述
+      </span>
+
+      <button
+        type="button"
+        class="close-btn"
+        id="modalClose"
+        aria-label="关闭"
+      >
+
+        <i class="fa-solid fa-xmark"></i>
+
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <div class="form-row">
+
+        <label>
+          <span class="req">*</span>
+          故障描述编码
+        </label>
+
+        <input
+          type="text"
+          id="fieldCode"
+          placeholder="请输入故障描述编码，如 FD001"
+          maxlength="32"
+        >
+
+      </div>
+
+
+      <div class="form-row">
+
+        <label>
+          <span class="req">*</span>
+          故障描述
+        </label>
+
+        <input
+          type="text"
+          id="fieldDesc"
+          placeholder="请输入故障描述"
+          maxlength="100"
+        >
+
+      </div>
+
+
+      <div class="form-row">
+
+        <label>
+          <span class="req">*</span>
+          故障类型
+        </label>
+
+        <select id="fieldFaultType">
+
+          <option value="">
+            请选择故障类型
+          </option>
+
+          <option value="F01">
+            F01 - 密封件老化
+          </option>
+
+          <option value="F02">
+            F02 - 振动异常
+          </option>
+
+          <option value="F03">
+            F03 - 润滑不足
+          </option>
+
+          <option value="F04">
+            F04 - 电气短路
+          </option>
+
+          <option value="F05">
+            F05 - 液压系统泄漏
+          </option>
+
+          <option value="F06">
+            F06 - 传感器失效
+          </option>
+
+          <option value="F07">
+            F07 - 传动皮带断裂
+          </option>
+
+          <option value="F08">
+            F08 - 轴承损坏
+          </option>
+
+          <option value="F09">
+            F09 - 电机过热
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-row">
+
+        <label>
+          备注
+        </label>
+
+        <textarea
+          id="fieldRemark"
+          placeholder="选填"
+          maxlength="200"
+        ></textarea>
+
+      </div>
+
+    </div>
+
+
+    <div class="modal-footer">
+
+      <button
+        type="button"
+        class="btn btn-default"
+        id="modalCancel"
+      >
+        取消
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        id="modalSave"
+      >
+        保存
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div
+  class="toast"
+  id="toast"
+>
+  <i class="fa-solid fa-circle-check"></i>
+  <span></span>
+</div>
+
+
+<script>
+
+  const CURRENT_USER = "admin";
+
+
+  const FAULT_TYPE_MAP = {
+
+    F01: "密封件老化",
+
+    F02: "振动异常",
+
+    F03: "润滑不足",
+
+    F04: "电气短路",
+
+    F05: "液压系统泄漏",
+
+    F06: "传感器失效",
+
+    F07: "传动皮带断裂",
+
+    F08: "轴承损坏",
+
+    F09: "电机过热"
+
+  };
+
+
+  /** 设备故障描述示例数据 */
+  let rows = [
+
+    {
+      id: 1,
+
+      code: "FD001",
+
+      description: "电机运行时外壳发烫",
+
+      faultTypeCode: "F09",
+
+      faultTypeName: "电机过热",
+
+      remark: "",
+
+      createUser: "admin",
+
+      createTime: "2026-09-09 16:31:13",
+
+      updateUser: "admin",
+
+      updateTime: "2026-09-09 16:31:13"
+    },
+
+
+    {
+      id: 2,
+
+      code: "FD002",
+
+      description: "电机温度持续升高",
+
+      faultTypeCode: "F09",
+
+      faultTypeName: "电机过热",
+
+      remark: "",
+
+      createUser: "admin",
+
+      createTime: "2026-09-09 16:32:10",
+
+      updateUser: "admin",
+
+      updateTime: "2026-09-09 16:32:10"
+    },
+
+
+    {
+      id: 3,
+
+      code: "FD003",
+
+      description: "轴承运行异响",
+
+      faultTypeCode: "F08",
+
+      faultTypeName: "轴承损坏",
+
+      remark: "",
+
+      createUser: "admin",
+
+      createTime: "2026-09-09 16:33:05",
+
+      updateUser: "admin",
+
+      updateTime: "2026-09-09 16:33:05"
+    },
+
+
+    {
+      id: 4,
+
+      code: "FD004",
+
+      description: "轴承温升异常",
+
+      faultTypeCode: "F08",
+
+      faultTypeName: "轴承损坏",
+
+      remark: "",
+
+      createUser: "admin",
+
+      createTime: "2026-09-09 16:34:12",
+
+      updateUser: "admin",
+
+      updateTime: "2026-09-09 16:34:12"
+    },
+
+
+    {
+      id: 5,
+
+      code: "FD005",
+
+      description: "传动皮带开裂",
+
+      faultTypeCode: "F07",
+
+      faultTypeName: "传动皮带断裂",
+
+      remark: "",
+
+      createUser: "admin",
+
+      createTime: "2026-09-09 16:35:03",
+
+      updateUser: "admin",
+
+      updateTime: "2026-09-09 16:35:03"
+    },
+
+
+    {
+      id: 6,
+
+      code: "FD006",
+
+      description: "传感器无反馈信号",
+
+      faultTypeCode: "F06",
+
+      faultTypeName: "传感器失效",
+
+      remark: "含接近开关、光电",
+
+      createUser: "admin",
+
+      createTime: "2026-09-09 16:36:15",
+
+      updateUser: "admin",
+
+      updateTime: "2026-09-09 16:36:15"
+    },
+
+
+    {
+      id: 7,
+
+      code: "FD007",
+
+      description: "液压油泄漏",
+
+      faultTypeCode: "F05",
+
+      faultTypeName: "液压系统泄漏",
+
+      remark: "",
+
+      createUser: "admin",
+
+      createTime: "2026-09-09 16:37:06",
+
+      updateUser: "admin",
+
+      updateTime: "2026-09-09 16:37:06"
+    },
+
+
+    {
+      id: 8,
+
+      code: "FD008",
+
+      description: "电路短路跳闸",
+
+      faultTypeCode: "F04",
+
+      faultTypeName: "电气短路",
+
+      remark: "",
+
+      createUser: "admin",
+
+      createTime: "2026-09-09 16:38:18",
+
+      updateUser: "admin",
+
+      updateTime: "2026-09-09 16:38:18"
+    },
+
+
+    {
+      id: 9,
+
+      code: "FD009",
+
+      description: "润滑油不足",
+
+      faultTypeCode: "F03",
+
+      faultTypeName: "润滑不足",
+
+      remark: "",
+
+      createUser: "admin",
+
+      createTime: "2026-09-09 16:39:21",
+
+      updateUser: "admin",
+
+      updateTime: "2026-09-09 16:39:21"
+    },
+
+
+    {
+      id: 10,
+
+      code: "FD010",
+
+      description: "设备振动值超标",
+
+      faultTypeCode: "F02",
+
+      faultTypeName: "振动异常",
+
+      remark: "离心机/泵类",
+
+      createUser: "admin",
+
+      createTime: "2026-09-09 16:40:25",
+
+      updateUser: "admin",
+
+      updateTime: "2026-09-09 16:40:25"
+    },
+
+
+    {
+      id: 11,
+
+      code: "FD011",
+
+      description: "密封件老化导致渗漏",
+
+      faultTypeCode: "F01",
+
+      faultTypeName: "密封件老化",
+
+      remark: "",
+
+      createUser: "admin",
+
+      createTime: "2026-09-09 16:41:11",
+
+      updateUser: "admin",
+
+      updateTime: "2026-09-09 16:41:11"
+    }
+
+  ];
+
+
+  let selectedIds = new Set();
+
+  let editId = null;
+
+  let sortKey = "code";
+
+  let sortDir = "desc";
+
+  let nextId = 12;
+
+
+  const $ = (sel) => document.querySelector(sel);
+
+  const $$ = (sel) => document.querySelectorAll(sel);
+
+
+  function nowStr() {
+
+    const d = new Date();
+
+    const p = (n) =>
+      String(n).padStart(2, "0");
+
+    return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+
+  }
+
+
+  function showToast(msg, type = "ok") {
+
+    const el = $("#toast");
+
+    const icon =
+      type === "ok"
+        ? "fa-circle-check"
+        : type === "warn"
+          ? "fa-triangle-exclamation"
+          : "fa-circle-xmark";
+
+    el.className =
+      `toast ${type}`;
+
+    el.innerHTML =
+      `<i class="fa-solid ${icon}"></i><span>${msg}</span>`;
+
+    requestAnimationFrame(() =>
+      el.classList.add("show")
+    );
+
+    clearTimeout(showToast._t);
+
+    showToast._t =
+      setTimeout(() =>
+        el.classList.remove("show"),
+      2200);
+
+  }
+
+
+  function escapeHtml(s) {
+
+    return String(s ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+
+  }
+
+
+  function escapeAttr(s) {
+
+    return escapeHtml(s)
+      .replace(/'/g, "&#39;");
+
+  }
+
+
+  function sortedRows() {
+
+    const list = [...rows];
+
+    list.sort((a, b) => {
+
+      const av =
+        String(a[sortKey] ?? "")
+          .toLowerCase();
+
+      const bv =
+        String(b[sortKey] ?? "")
+          .toLowerCase();
+
+      if (av < bv)
+        return sortDir === "asc"
+          ? -1
+          : 1;
+
+      if (av > bv)
+        return sortDir === "asc"
+          ? 1
+          : -1;
+
+      return 0;
+
+    });
+
+    return list;
+
+  }
+
+
+  function renderRows(list) {
+
+    const tbody =
+      $("#tableBody");
+
+
+    tbody.innerHTML =
+      list
+        .map((r) => {
+
+          const checked =
+            selectedIds.has(r.id)
+              ? "checked"
+              : "";
+
+          const sel =
+            selectedIds.has(r.id)
+              ? "selected"
+              : "";
+
+          const remark =
+            r.remark
+              ? escapeHtml(r.remark)
+              : '<span class="empty-cell">--</span>';
+
+
+          return `
+
+            <tr
+              class="${sel}"
+              data-id="${r.id}"
+            >
+
+              <td class="col-check">
+
+                <input
+                  type="checkbox"
+                  class="row-check"
+                  data-id="${r.id}"
+                  ${checked}
+                >
+
+              </td>
+
+
+              <td>
+
+                <a
+                  class="link-code"
+                  href="javascript:;"
+                  data-id="${r.id}"
+                >
+
+                  ${escapeHtml(r.code)}
+
+                </a>
+
+              </td>
+
+
+              <td title="${escapeAttr(r.description)}">
+
+                ${escapeHtml(r.description)}
+
+              </td>
+
+
+              <td>
+
+                ${escapeHtml(r.faultTypeCode)}
+
+              </td>
+
+
+              <td>
+
+                ${escapeHtml(r.faultTypeName)}
+
+              </td>
+
+
+              <td title="${escapeAttr(r.remark || "")}">
+
+                ${remark}
+
+              </td>
+
+
+              <td>
+
+                ${escapeHtml(r.createUser)}
+
+              </td>
+
+
+              <td>
+
+                ${escapeHtml(r.createTime)}
+
+              </td>
+
+
+              <td>
+
+                ${escapeHtml(r.updateUser)}
+
+              </td>
+
+
+              <td>
+
+                ${escapeHtml(r.updateTime)}
+
+              </td>
+
+            </tr>
+
+          `;
+
+        })
+        .join("");
+
+
+    bindTableRowEvents();
+
+  }
+
+
+  function renderTable() {
+
+    const list =
+      sortedRows();
+
+    renderRows(list);
+
+    $("#rowSummary").textContent =
+      `共 ${list.length} 条`;
+
+    $("#checkAll").checked =
+      list.length > 0 &&
+      list.every((r) =>
+        selectedIds.has(r.id)
+      );
+
+    updateActionButtons();
+
+    updateSortIndicators();
+
+  }
+
+
+  function bindTableRowEvents() {
+
+    const tbody =
+      $("#tableBody");
+
+
+    tbody
+      .querySelectorAll(".row-check")
+      .forEach((cb) => {
+
+        cb.addEventListener(
+          "change",
+          () => {
+
+            const id =
+              Number(cb.dataset.id);
+
+            if (cb.checked)
+              selectedIds.add(id);
+
+            else
+              selectedIds.delete(id);
+
+            renderTable();
+
+          }
+        );
+
+      });
+
+
+    tbody
+      .querySelectorAll(".link-code")
+      .forEach((a) => {
+
+        a.addEventListener(
+          "click",
+          (e) => {
+
+            e.preventDefault();
+
+            openEdit(
+              Number(a.dataset.id)
+            );
+
+          }
+        );
+
+      });
+
+
+    tbody
+      .querySelectorAll("tr")
+      .forEach((tr) => {
+
+        tr.addEventListener(
+          "click",
+          (e) => {
+
+            if (
+              e.target.closest(
+                "input, a"
+              )
+            )
+              return;
+
+
+            const id =
+              Number(tr.dataset.id);
+
+
+            if (
+              selectedIds.has(id)
+            )
+              selectedIds.delete(id);
+
+            else
+              selectedIds.add(id);
+
+
+            renderTable();
+
+          }
+        );
+
+      });
+
+  }
+
+
+  function updateActionButtons() {
+
+    const n =
+      selectedIds.size;
+
+    $("#btnEdit").disabled =
+      n !== 1;
+
+    $("#btnDelete").disabled =
+      n === 0;
+
+  }
+
+
+  function updateSortIndicators() {
+
+    $$("th[data-key]")
+      .forEach((th) => {
+
+        const key =
+          th.dataset.key;
+
+        const up =
+          th.querySelector(".up");
+
+        const down =
+          th.querySelector(".down");
+
+
+        up.classList.toggle(
+          "active",
+          key === sortKey &&
+          sortDir === "asc"
+        );
+
+        down.classList.toggle(
+          "active",
+          key === sortKey &&
+          sortDir === "desc"
+        );
+
+      });
+
+  }
+
+
+  function openAdd() {
+
+    editId = null;
+
+    $("#modalTitle").textContent =
+      "新增故障描述";
+
+    $("#fieldCode").disabled =
+      false;
+
+    $("#fieldCode").value =
+      "";
+
+    $("#fieldDesc").value =
+      "";
+
+    $("#fieldFaultType").value =
+      "";
+
+    $("#fieldRemark").value =
+      "";
+
+    $("#editModal")
+      .classList
+      .add("show");
+
+    $("#fieldCode")
+      .focus();
+
+  }
+
+
+  function openEdit(id) {
+
+    const row =
+      rows.find((r) =>
+        r.id === id
+      );
+
+
+    if (!row)
+      return;
+
+
+    editId =
+      id;
+
+    selectedIds =
+      new Set([id]);
+
+    renderTable();
+
+
+    $("#modalTitle").textContent =
+      "编辑故障描述";
+
+    $("#fieldCode").disabled =
+      true;
+
+    $("#fieldCode").value =
+      row.code;
+
+    $("#fieldDesc").value =
+      row.description;
+
+    $("#fieldFaultType").value =
+      row.faultTypeCode;
+
+    $("#fieldRemark").value =
+      row.remark || "";
+
+
+    $("#editModal")
+      .classList
+      .add("show");
+
+    $("#fieldDesc")
+      .focus();
+
+  }
+
+
+  function closeModal() {
+
+    $("#editModal")
+      .classList
+      .remove("show");
+
+  }
+
+
+  function saveModal() {
+
+    const code =
+      $("#fieldCode")
+        .value
+        .trim();
+
+    const description =
+      $("#fieldDesc")
+        .value
+        .trim();
+
+    const faultTypeCode =
+      $("#fieldFaultType")
+        .value;
+
+    const remark =
+      $("#fieldRemark")
+        .value
+        .trim();
+
+
+    const faultTypeName =
+      FAULT_TYPE_MAP[
+        faultTypeCode
+      ] || "";
+
+
+    if (!code) {
+
+      showToast(
+        "请填写故障描述编码",
+        "warn"
+      );
+
+      return;
+
+    }
+
+
+    if (!description) {
+
+      showToast(
+        "请填写故障描述",
+        "warn"
+      );
+
+      return;
+
+    }
+
+
+    if (!faultTypeCode) {
+
+      showToast(
+        "请选择故障类型",
+        "warn"
+      );
+
+      return;
+
+    }
+
+
+    if (editId == null) {
+
+      if (
+        rows.some(
+          (r) =>
+            r.code
+              .toUpperCase() ===
+            code
+              .toUpperCase()
+        )
+      ) {
+
+        showToast(
+          "故障描述编码已存在",
+          "err"
+        );
+
+        return;
+
+      }
+
+
+      const t =
+        nowStr();
+
+
+      rows.unshift({
+
+        id:
+          nextId++,
+
+        code,
+
+        description,
+
+        faultTypeCode,
+
+        faultTypeName,
+
+        remark,
+
+        createUser:
+          CURRENT_USER,
+
+        createTime:
+          t,
+
+        updateUser:
+          CURRENT_USER,
+
+        updateTime:
+          t
+
+      });
+
+
+      showToast(
+        "新增成功"
+      );
+
+    } else {
+
+      const row =
+        rows.find((r) =>
+          r.id === editId
+        );
+
+
+      if (!row)
+        return;
+
+
+      row.description =
+        description;
+
+      row.faultTypeCode =
+        faultTypeCode;
+
+      row.faultTypeName =
+        faultTypeName;
+
+      row.remark =
+        remark;
+
+      row.updateUser =
+        CURRENT_USER;
+
+      row.updateTime =
+        nowStr();
+
+
+      showToast(
+        "保存成功"
+      );
+
+    }
+
+
+    closeModal();
+
+    renderTable();
+
+  }
+
+
+  function deleteSelected() {
+
+    if (
+      selectedIds.size === 0
+    )
+      return;
+
+
+    if (
+      !confirm(
+        `确认删除已选中的 ${selectedIds.size} 条故障描述？`
+      )
+    )
+      return;
+
+
+    rows =
+      rows.filter(
+        (r) =>
+          !selectedIds.has(r.id)
+      );
+
+
+    selectedIds.clear();
+
+
+    showToast(
+      "删除成功"
+    );
+
+
+    renderTable();
+
+  }
+
+
+  function switchView(name) {
+
+    $$(".data-tab")
+      .forEach((t) => {
+
+        t.classList.toggle(
+          "active",
+          t.dataset.view === name
+        );
+
+      });
+
+
+    $("#viewTable")
+      .classList
+      .toggle(
+        "active",
+        name === "table"
+      );
+
+
+    $("#viewHistory")
+      .classList
+      .toggle(
+        "active",
+        name === "history"
+      );
+
+  }
+
+
+  $("#checkAll")
+    .addEventListener(
+      "change",
+      () => {
+
+        if (
+          $("#checkAll").checked
+        ) {
+
+          sortedRows()
+            .forEach((r) =>
+              selectedIds.add(r.id)
+            );
+
+        } else {
+
+          selectedIds.clear();
+
+        }
+
+
+        renderTable();
+
+      }
+    );
+
+
+  $$("th[data-key]")
+    .forEach((th) => {
+
+      th.addEventListener(
+        "click",
+        () => {
+
+          const key =
+            th.dataset.key;
+
+
+          if (
+            sortKey === key
+          ) {
+
+            sortDir =
+              sortDir === "asc"
+                ? "desc"
+                : "asc";
+
+          } else {
+
+            sortKey =
+              key;
+
+            sortDir =
+              "asc";
+
+          }
+
+
+          renderTable();
+
+        }
+      );
+
+    });
+
+
+  $$(".data-tab")
+    .forEach((tab) => {
+
+      tab.addEventListener(
+        "click",
+        () =>
+          switchView(
+            tab.dataset.view
+          )
+      );
+
+    });
+
+
+  $("#btnAdd")
+    .addEventListener(
+      "click",
+      openAdd
+    );
+
+
+  $("#btnEdit")
+    .addEventListener(
+      "click",
+      () => {
+
+        if (
+          selectedIds.size === 1
+        ) {
+
+          openEdit(
+            [...selectedIds][0]
+          );
+
+        }
+
+      }
+    );
+
+
+  $("#btnDelete")
+    .addEventListener(
+      "click",
+      deleteSelected
+    );
+
+
+  $("#btnQuery")
+    .addEventListener(
+      "click",
+      () => {
+
+        switchView(
+          "table"
+        );
+
+        renderTable();
+
+        showToast(
+          "查询完成"
+        );
+
+      }
+    );
+
+
+  $("#btnHistoryQuery")
+    .addEventListener(
+      "click",
+      () => {
+
+        switchView(
+          "history"
+        );
+
+
+        $("#viewHistory").innerHTML = `
+
+          <div class="table-wrap">
+
+            <table>
+
+              <thead>
+
+                <tr>
+
+                  <th>操作类型</th>
+
+                  <th>故障描述编码</th>
+
+                  <th>故障描述</th>
+
+                  <th>故障类型编码</th>
+
+                  <th>故障类型描述</th>
+
+                  <th>操作人</th>
+
+                  <th>操作时间</th>
+
+                </tr>
+
+              </thead>
+
+
+              <tbody>
+
+                ${
+                  rows
+                    .slice(0, 5)
+                    .map((r, i) => `
+
+                      <tr>
+
+                        <td>
+                          ${
+                            i % 2 === 0
+                              ? "修改"
+                              : "新增"
+                          }
+                        </td>
+
+                        <td>
+
+                          <span class="link-code">
+
+                            ${escapeHtml(r.code)}
+
+                          </span>
+
+                        </td>
+
+                        <td>
+                          ${escapeHtml(r.description)}
+                        </td>
+
+                        <td>
+                          ${escapeHtml(r.faultTypeCode)}
+                        </td>
+
+                        <td>
+                          ${escapeHtml(r.faultTypeName)}
+                        </td>
+
+                        <td>
+                          ${escapeHtml(r.updateUser)}
+                        </td>
+
+                        <td>
+                          ${escapeHtml(r.updateTime)}
+                        </td>
+
+                      </tr>
+
+                    `)
+                    .join("")
+                }
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+
+          <div class="footer-bar">
+
+            <span>
+              履历共 ${Math.min(5, rows.length)} 条
+            </span>
+
+            <span>
+              变更履历
+            </span>
+
+          </div>
+
+        `;
+
+
+        showToast(
+          "履历查询完成"
+        );
+
+      }
+    );
+
+
+  $("#btnClearAll")
+    .addEventListener(
+      "click",
+      () => {
+
+        selectedIds.clear();
+
+        renderTable();
+
+        showToast(
+          "已清空选择",
+          "warn"
+        );
+
+      }
+    );
+
+
+  $("#btnReset")
+    .addEventListener(
+      "click",
+      () => {
+
+        selectedIds.clear();
+
+        sortKey =
+          "code";
+
+        sortDir =
+          "desc";
+
+        renderTable();
+
+        showToast(
+          "表单已重置",
+          "warn"
+        );
+
+      }
+    );
+
+
+  $("#btnAdvanced")
+    .addEventListener(
+      "click",
+      () => {
+
+        showToast(
+          "高级查询配置（演示）",
+          "warn"
+        );
+
+      }
+    );
+
+
+  $("#btnRefresh")
+    .addEventListener(
+      "click",
+      () => {
+
+        renderTable();
+
+        showToast(
+          "已刷新"
+        );
+
+      }
+    );
+
+
+  $("#btnTableSearch")
+    .addEventListener(
+      "click",
+      () => {
+
+        const kw =
+          prompt(
+            "请输入故障描述编码、故障描述、故障类型编码或故障类型关键字"
+          );
+
+
+        if (
+          kw == null
+        )
+          return;
+
+
+        const q =
+          kw
+            .trim()
+            .toLowerCase();
+
+
+        if (!q) {
+
+          renderTable();
+
+          return;
+
+        }
+
+
+        const matched =
+          rows.filter((r) =>
+
+            r.code
+              .toLowerCase()
+              .includes(q)
+
+            ||
+
+            r.description
+              .toLowerCase()
+              .includes(q)
+
+            ||
+
+            r.faultTypeCode
+              .toLowerCase()
+              .includes(q)
+
+            ||
+
+            r.faultTypeName
+              .toLowerCase()
+              .includes(q)
+
+          );
+
+
+        selectedIds.clear();
+
+        renderRows(
+          matched
+        );
+
+
+        $("#rowSummary").textContent =
+          `共 ${matched.length} 条（筛选结果）`;
+
+
+        $("#checkAll").checked =
+          false;
+
+
+        updateActionButtons();
+
+
+        showToast(
+          `筛选到 ${matched.length} 条`
+        );
+
+      }
+    );
+
+
+  $("#modalClose")
+    .addEventListener(
+      "click",
+      closeModal
+    );
+
+
+  $("#modalCancel")
+    .addEventListener(
+      "click",
+      closeModal
+    );
+
+
+  $("#modalSave")
+    .addEventListener(
+      "click",
+      saveModal
+    );
+
+
+  $("#editModal")
+    .addEventListener(
+      "click",
+      (e) => {
+
+        if (
+          e.target ===
+          $("#editModal")
+        )
+          closeModal();
+
+      }
+    );
+
+
+  document
+    .addEventListener(
+      "keydown",
+      (e) => {
+
+        if (
+          e.key === "Escape"
+        )
+          closeModal();
+
+      }
+    );
+
+
+  renderTable();
+
+</script>
+
+</body>
+</html>
