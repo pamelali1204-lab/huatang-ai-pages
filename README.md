@@ -4,5 +4,4 @@
 
 ## 访问
 
-- https://pamelali1204-lab.github.io/huatang-ai-pages/
-- https://pamelali1204-lab.github.io/huatang-ai-pages/huatang-fault-type-maintenance.html
+https://pamelali1204-lab.github.io/huatang-ai-pages/
