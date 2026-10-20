@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>备品备件使用-华糖AI</title>
+
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      --bg-app: #0f0f0f;
+      --bg-header: #141414;
+      --bg-panel: #1a1a1a;
+      --bg-table: #141414;
+      --bg-row-hover: #1f1f1f;
+
+      --border: #303030;
+      --border-soft: #252525;
+
+      --text: #e8e8e8;
+      --text-muted: #8c8c8c;
+      --text-secondary: #bfbfbf;
+
+      --primary: #1677ff;
+      --primary-hover: #4096ff;
+
+      --success: #389e0d;
+      --success-hover: #52c41a;
+
+      --warning: #d46b08;
+      --warning-hover: #fa8c16;
+
+      --danger: #cf1322;
+      --danger-hover: #ff4d4f;
+
+      --info: #0958d9;
+      --link: #69b1ff;
+      --tab-active: #1677ff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "PingFang SC",
+        "Hiragino Sans GB",
+        "Microsoft YaHei",
+        sans-serif;
+
+      background: var(--bg-app);
+      color: var(--text);
+
+      font-size: 13px;
+      line-height: 1.5;
+
+      min-height: 100vh;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-bar {
+      height: 40px;
+
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 16px;
+
+      flex-shrink: 0;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+
+      gap: 6px;
+
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .breadcrumb a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--link);
+    }
+
+    .breadcrumb .sep {
+      color: #595959;
+    }
+
+    .breadcrumb .current {
+      color: var(--text-secondary);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+
+      gap: 14px;
+
+      color: var(--text-secondary);
+    }
+
+    .top-actions i {
+      font-size: 14px;
+      cursor: pointer;
+      opacity: 0.85;
+    }
+
+    .top-actions i:hover {
+      color: var(--link);
+      opacity: 1;
+    }
+
+    .avatar {
+      width: 26px;
+      height: 26px;
+
+      border-radius: 50%;
+
+      background: linear-gradient(135deg, #595959, #262626);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 11px;
+      color: #fff;
+
+      cursor: pointer;
+    }
+
+    .page-tabs {
+      height: 36px;
+
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border);
+
+      display: flex;
+      align-items: flex-end;
+
+      padding: 0 12px;
+
+      flex-shrink: 0;
+
+      gap: 2px;
+    }
+
+    .page-tab {
+      height: 30px;
+
+      padding: 0 14px;
+
+      display: flex;
+      align-items: center;
+
+      gap: 8px;
+
+      background: #1f1f1f;
+
+      border: 1px solid var(--border);
+      border-bottom: none;
+
+      border-radius: 4px 4px 0 0;
+
+      color: var(--text-secondary);
+
+      font-size: 12px;
+    }
+
+    .page-tab.active {
+      background: var(--bg-app);
+      color: var(--text);
+    }
+
+    .page-tab.active::before {
+      content: "";
+
+      width: 6px;
+      height: 6px;
+
+      border-radius: 50%;
+
+      background: var(--tab-active);
+
+      display: inline-block;
+    }
+
+    .page-tab .close {
+      font-size: 10px;
+      opacity: 0.5;
+    }
+
+    .main {
+      flex: 1;
+
+      padding: 12px;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 10px;
+
+      min-height: 0;
+    }
+
+    .panel {
+      background: var(--bg-panel);
+
+      border: 1px solid var(--border);
+      border-radius: 2px;
+    }
+
+    .query-panel {
+      padding: 12px 14px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 12px;
+
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      gap: 6px;
+
+      height: 30px;
+
+      padding: 0 14px;
+
+      border: none;
+      border-radius: 2px;
+
+      font-size: 13px;
+
+      cursor: pointer;
+
+      color: #fff;
+
+      white-space: nowrap;
+
+      transition:
+        background 0.15s,
+        opacity 0.15s;
+
+      font-family: inherit;
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-ghost {
+      background: transparent;
+
+      border: 1px solid #595959;
+
+      color: var(--text);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--primary);
+      color: var(--link);
+    }
+
+    .btn-default {
+      background: #434343;
+
+      border: 1px solid #595959;
+
+      color: var(--text);
+    }
+
+    .btn-default:hover {
+      background: #595959;
+    }
+
+    .btn-warning {
+      background: var(--warning);
+    }
+
+    .btn-warning:hover {
+      background: var(--warning-hover);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-info {
+      background: var(--info);
+    }
+
+    .btn-info:hover {
+      background: var(--primary-hover);
+    }
+
+    .query-actions {
+      display: flex;
+      gap: 8px;
+
+      flex-wrap: wrap;
+    }
+
+    .data-panel {
+      flex: 1;
+
+      display: flex;
+      flex-direction: column;
+
+      min-height: 0;
+
+      overflow: hidden;
+    }
+
+    .data-tabs {
+      display: flex;
+      align-items: center;
+
+      border-bottom: 1px solid var(--border);
+
+      padding: 0 12px;
+
+      height: 40px;
+
+      flex-shrink: 0;
+    }
+
+    .data-tab {
+      height: 40px;
+
+      padding: 0 16px;
+
+      display: flex;
+      align-items: center;
+
+      color: var(--text-secondary);
+
+      cursor: pointer;
+
+      border-bottom: 2px solid transparent;
+
+      margin-bottom: -1px;
+    }
+
+    .data-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+
+      font-weight: 500;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 10px 12px;
+
+      border-bottom: 1px solid var(--border-soft);
+
+      flex-shrink: 0;
+    }
+
+    .toolbar-left {
+      display: flex;
+      gap: 8px;
+    }
+
+    .toolbar-right {
+      display: flex;
+      gap: 12px;
+
+      color: var(--text-muted);
+    }
+
+    .toolbar-right i {
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .toolbar-right i:hover {
+      color: var(--link);
+    }
+
+    .table-wrap {
+      flex: 1;
+
+      overflow: auto;
+
+      min-height: 0;
+    }
+
+    table {
+      width: 100%;
+
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    th {
+      background: #1f1f1f;
+
+      color: var(--text-secondary);
+
+      font-weight: 500;
+
+      text-align: left;
+
+      padding: 10px 12px;
+
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border-soft);
+
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 9px 12px;
+
+      border-bottom: 1px solid var(--border-soft);
+      border-right: 1px solid var(--border-soft);
+
+      color: var(--text);
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      background: var(--bg-table);
+    }
+
+    td:last-child,
+    th:last-child {
+      border-right: none;
+    }
+
+    tbody tr:hover td {
+      background: var(--bg-row-hover);
+    }
+
+    .link-code {
+      color: var(--link);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .link-code:hover {
+      text-decoration: underline;
+    }
+
+    .empty-cell {
+      color: var(--text-muted);
+    }
+
+    .footer-bar {
+      height: 36px;
+
+      border-top: 1px solid var(--border-soft);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 14px;
+
+      color: var(--text-muted);
+
+      font-size: 12px;
+
+      flex-shrink: 0;
+
+      background: var(--bg-panel);
+    }
+
+    .modal-mask {
+      position: fixed;
+
+      inset: 0;
+
+      background: rgba(0, 0, 0, 0.55);
+
+      display: none;
+      align-items: center;
+      justify-content: center;
+
+      z-index: 1000;
+
+      padding: 20px;
+    }
+
+    .modal-mask.show {
+      display: flex;
+    }
+
+    .modal {
+      background: #1f1f1f;
+
+      border: 1px solid var(--border);
+      border-radius: 4px;
+
+      width: 100%;
+      max-width: 760px;
+
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 14px 18px;
+
+      border-bottom: 1px solid var(--border);
+
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .modal-header .close-btn {
+      background: none;
+      border: none;
+
+      color: var(--text-muted);
+
+      cursor: pointer;
+
+      font-size: 16px;
+    }
+
+    .modal-body {
+      padding: 18px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 24px;
+    }
+
+    .detail-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .detail-label {
+      color: var(--text-secondary);
+    }
+
+    .detail-value {
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+
+      padding: 6px 10px;
+
+      background: #141414;
+
+      border: 1px solid #434343;
+      border-radius: 2px;
+    }
+
+    .detail-section-title {
+      margin-top: 18px;
+      margin-bottom: 10px;
+
+      color: var(--link);
+
+      font-size: 14px;
+    }
+
+    .detail-parts-table {
+      border: 1px solid var(--border);
+    }
+
+    .modal-footer {
+      padding: 12px 18px;
+
+      border-top: 1px solid var(--border);
+
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .toast {
+      position: fixed;
+
+      top: 56px;
+      left: 50%;
+
+      transform: translateX(-50%) translateY(-12px);
+
+      background: #1f1f1f;
+
+      border: 1px solid var(--border);
+
+      color: var(--text);
+
+      padding: 10px 18px;
+
+      border-radius: 4px;
+
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      transition:
+        opacity 0.2s,
+        transform 0.2s;
+
+      z-index: 1100;
+    }
+
+    .toast.show {
+      opacity: 1;
+
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .query-panel {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="top-bar">
+
+  <nav class="breadcrumb">
+
+    <a href="#">首页</a>
+
+    <span class="sep">/</span>
+
+    <a href="#">智能设备</a>
+
+    <span class="sep">/</span>
+
+    <a href="#">备品备件管理</a>
+
+    <span class="sep">/</span>
+
+    <span class="current">备品备件使用</span>
+
+  </nav>
+
+
+  <div class="top-actions">
+
+    <i class="fa-solid fa-magnifying-glass"></i>
+
+    <i class="fa-solid fa-expand"></i>
+
+    <i class="fa-regular fa-sun"></i>
+
+    <i class="fa-solid fa-language"></i>
+
+    <i class="fa-solid fa-text-height"></i>
+
+    <div class="avatar">管</div>
+
+  </div>
+
+</header>
+
+
+<div class="page-tabs">
+
+  <div class="page-tab active">
+
+    备品备件使用
+
+    <i class="fa-solid fa-xmark close"></i>
+
+  </div>
+
+</div>
+
+
+<main class="main">
+
+  <section class="panel query-panel">
+
+    <button
+      type="button"
+      class="btn btn-ghost"
+      id="btnAdvanced"
+    >
+      <i class="fa-solid fa-sliders"></i>
+      高级查询配置
+    </button>
+
+
+    <div class="query-actions">
+
+      <button
+        type="button"
+        class="btn btn-default"
+        id="btnClearAll"
+      >
+        全部清空
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-warning"
+        id="btnReset"
+      >
+        重置表单
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        id="btnQuery"
+      >
+        数据查询
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <section class="panel data-panel">
+
+    <div class="data-tabs">
+
+      <div class="data-tab active">
+        表格数据
+      </div>
+
+    </div>
+
+
+    <div class="toolbar">
+
+      <div class="toolbar-left">
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="btnExport"
+        >
+          <i class="fa-solid fa-file-export"></i>
+          导出
+        </button>
+
+      </div>
+
+
+      <div class="toolbar-right">
+
+        <i
+          class="fa-solid fa-magnifying-glass"
+          id="btnSearch"
+          title="搜索"
+        ></i>
+
+        <i
+          class="fa-solid fa-rotate-right"
+          id="btnRefresh"
+          title="刷新"
+        ></i>
+
+      </div>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+      <table>
+
+        <colgroup>
+          <col style="width:150px">
+          <col style="width:180px">
+          <col style="width:220px">
+          <col style="width:100px">
+          <col style="width:190px">
+          <col style="width:150px">
+          <col style="width:200px">
+        </colgroup>
+
+
+        <thead>
+
+          <tr>
+            <th>备品备件编码</th>
+            <th>备品备件名称</th>
+            <th>备品备件描述</th>
+            <th>使用数量</th>
+            <th>维修单号</th>
+            <th>设备编码</th>
+            <th>设备名称</th>
+          </tr>
+
+        </thead>
+
+
+        <tbody id="tableBody"></tbody>
+
+      </table>
+
+    </div>
+
+
+    <div class="footer-bar">
+
+      <span id="rowSummary">
+        共 0 条
+      </span>
+
+      <span>
+        数据来源：设备维修单备件使用明细
+      </span>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<div
+  class="modal-mask"
+  id="detailModal"
+>
+
+  <div class="modal">
+
+    <div class="modal-header">
+
+      <span>
+        维修单详情
+      </span>
+
+      <button
+        type="button"
+        class="close-btn"
+        id="modalClose"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <div class="detail-grid">
+
+        <div class="detail-item">
+
+          <div class="detail-label">
+            维修单号
+          </div>
+
+          <div
+            class="detail-value"
+            id="dRepairOrder"
+          ></div>
+
+        </div>
+
+
+        <div class="detail-item">
+
+          <div class="detail-label">
+            维修状态
+          </div>
+
+          <div
+            class="detail-value"
+            id="dStatus"
+          ></div>
+
+        </div>
+
+
+        <div class="detail-item">
+
+          <div class="detail-label">
+            设备编码
+          </div>
+
+          <div
+            class="detail-value"
+            id="dDeviceCode"
+          ></div>
+
+        </div>
+
+
+        <div class="detail-item">
+
+          <div class="detail-label">
+            设备名称
+          </div>
+
+          <div
+            class="detail-value"
+            id="dDeviceName"
+          ></div>
+
+        </div>
+
+
+        <div class="detail-item">
+
+          <div class="detail-label">
+            故障类型
+          </div>
+
+          <div
+            class="detail-value"
+            id="dFaultType"
+          ></div>
+
+        </div>
+
+
+        <div class="detail-item">
+
+          <div class="detail-label">
+            故障描述
+          </div>
+
+          <div
+            class="detail-value"
+            id="dFaultDesc"
+          ></div>
+
+        </div>
+
+
+        <div class="detail-item">
+
+          <div class="detail-label">
+            维修人员
+          </div>
+
+          <div
+            class="detail-value"
+            id="dRepairPerson"
+          ></div>
+
+        </div>
+
+
+        <div class="detail-item">
+
+          <div class="detail-label">
+            报修时间
+          </div>
+
+          <div
+            class="detail-value"
+            id="dRepairTime"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+      <div class="detail-section-title">
+        使用备件明细
+      </div>
+
+
+      <table class="detail-parts-table">
+
+        <thead>
+
+          <tr>
+            <th>备品备件编码</th>
+            <th>备品备件名称</th>
+            <th>备品备件描述</th>
+            <th>使用数量</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="detailPartsBody"></tbody>
+
+      </table>
+
+    </div>
+
+
+    <div class="modal-footer">
+
+      <button
+        type="button"
+        class="btn btn-default"
+        id="modalCloseBtn"
+      >
+        关闭
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div
+  class="toast"
+  id="toast"
+>
+  <span></span>
+</div>
+
+
+<script>
+
+  const rows = [
+
+    {
+      id: 1,
+      spareCode: "BYJ03-01",
+      spareName: "电机轴承-A",
+      spareDesc: "乳化釜搅拌电机驱动端轴承",
+      quantity: 2,
+      repairOrderNo: "SBWX20260411001",
+      deviceCode: "M-101",
+      deviceName: "乳化釜搅拌电机",
+
+      repairStatus: "已维修",
+      faultType: "轴承损坏",
+      faultDesc: "轴承运行异响",
+      repairPerson: "admin",
+      repairTime: "2026-04-11 00:00:00"
+    },
+
+    {
+      id: 2,
+      spareCode: "BYJ001",
+      spareName: "机械密封件",
+      spareDesc: "过滤供料泵机械密封",
+      quantity: 1,
+      repairOrderNo: "SBWX20260410001",
+      deviceCode: "P-201",
+      deviceName: "过滤供料泵P-201",
+
+      repairStatus: "已维修",
+      faultType: "密封件老化",
+      faultDesc: "泵体连接处出现渗漏",
+      repairPerson: "余利勇",
+      repairTime: "2026-04-10 00:00:00"
+    },
+
+    {
+      id: 3,
+      spareCode: "BYJ002",
+      spareName: "PT100温度传感器",
+      spareDesc: "乳化反应釜温度检测传感器",
+      quantity: 1,
+      repairOrderNo: "SBWX20260330001",
+      deviceCode: "R-102",
+      deviceName: "乳化反应釜R-102",
+
+      repairStatus: "已维修",
+      faultType: "传感器失效",
+      faultDesc: "温度信号无反馈",
+      repairPerson: "admin",
+      repairTime: "2026-03-30 00:00:00"
+    },
+
+    {
+      id: 4,
+      spareCode: "BYJ004",
+      spareName: "传动皮带",
+      spareDesc: "搅拌设备传动皮带",
+      quantity: 2,
+      repairOrderNo: "SBWX20260227002",
+      deviceCode: "M-102",
+      deviceName: "乳化釜搅拌机",
+
+      repairStatus: "已维修",
+      faultType: "传动皮带断裂",
+      faultDesc: "皮带开裂并伴随打滑",
+      repairPerson: "admin",
+      repairTime: "2026-02-27 00:00:00"
+    },
+
+    {
+      id: 5,
+      spareCode: "BYJ005",
+      spareName: "设备润滑油",
+      spareDesc: "均质机轴承专用润滑油",
+      quantity: 1,
+      repairOrderNo: "SBWX20260228001",
+      deviceCode: "H-101",
+      deviceName: "高压均质机H-101",
+
+      repairStatus: "已维修",
+      faultType: "润滑不足",
+      faultDesc: "轴承区域温升及摩擦声增大",
+      repairPerson: "余利勇",
+      repairTime: "2026-02-28 00:00:00"
+    },
+
+    {
+      id: 6,
+      spareCode: "BYJ006",
+      spareName: "压力传感器",
+      spareDesc: "均质机出口压力检测传感器",
+      quantity: 1,
+      repairOrderNo: "SBWX20260305001",
+      deviceCode: "H-101",
+      deviceName: "高压均质机H-101",
+
+      repairStatus: "已维修",
+      faultType: "传感器失效",
+      faultDesc: "压力信号波动异常",
+      repairPerson: "admin",
+      repairTime: "2026-03-05 00:00:00"
+    },
+
+    {
+      id: 7,
+      spareCode: "BYJ007",
+      spareName: "电机散热风扇",
+      spareDesc: "乳化釜搅拌电机散热风扇",
+      quantity: 1,
+      repairOrderNo: "SBWX20260313001",
+      deviceCode: "M-103",
+      deviceName: "乳化釜搅拌电机",
+
+      repairStatus: "已维修",
+      faultType: "电机过热",
+      faultDesc: "电机运行温度持续升高",
+      repairPerson: "admin",
+      repairTime: "2026-03-13 00:00:00"
+    }
+
+  ];
+
+
+  let currentRows = [...rows];
+
+
+  const $ =
+    (sel) =>
+      document.querySelector(sel);
+
+
+  function escapeHtml(value) {
+
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+
+  }
+
+
+  function showToast(message) {
+
+    const toast =
+      $("#toast");
+
+    toast.innerHTML =
+      `<span>${escapeHtml(message)}</span>`;
+
+    toast.classList.add(
+      "show"
+    );
+
+    clearTimeout(
+      showToast.timer
+    );
+
+    showToast.timer =
+      setTimeout(() => {
+
+        toast.classList.remove(
+          "show"
+        );
+
+      }, 2000);
+
+  }
+
+
+  function renderTable(list = currentRows) {
+
+    const tbody =
+      $("#tableBody");
+
+
+    tbody.innerHTML =
+      list.map((r) => `
+
+        <tr>
+
+          <td>
+            <span class="link-code">
+              ${escapeHtml(r.spareCode)}
+            </span>
+          </td>
+
+          <td>
+            ${escapeHtml(r.spareName)}
+          </td>
+
+          <td>
+            ${
+              r.spareDesc
+                ? escapeHtml(r.spareDesc)
+                : '<span class="empty-cell">--</span>'
+            }
+          </td>
+
+          <td>
+            ${escapeHtml(r.quantity)}
+          </td>
+
+          <td>
+
+            <a
+              href="javascript:;"
+              class="link-code repair-link"
+              data-id="${r.id}"
+            >
+              ${escapeHtml(r.repairOrderNo)}
+            </a>
+
+          </td>
+
+          <td>
+            ${escapeHtml(r.deviceCode)}
+          </td>
+
+          <td>
+            ${escapeHtml(r.deviceName)}
+          </td>
+
+        </tr>
+
+      `).join("");
+
+
+    $("#rowSummary").textContent =
+      `共 ${list.length} 条`;
+
+
+    document
+      .querySelectorAll(
+        ".repair-link"
+      )
+      .forEach((link) => {
+
+        link.addEventListener(
+          "click",
+          () => {
+
+            openRepairDetail(
+              Number(link.dataset.id)
+            );
+
+          }
+        );
+
+      });
+
+  }
+
+
+  function openRepairDetail(id) {
+
+    const row =
+      rows.find(
+        (item) =>
+          item.id === id
+      );
+
+
+    if (!row)
+      return;
+
+
+    $("#dRepairOrder").textContent =
+      row.repairOrderNo;
+
+    $("#dStatus").textContent =
+      row.repairStatus;
+
+    $("#dDeviceCode").textContent =
+      row.deviceCode;
+
+    $("#dDeviceName").textContent =
+      row.deviceName;
+
+    $("#dFaultType").textContent =
+      row.faultType;
+
+    $("#dFaultDesc").textContent =
+      row.faultDesc;
+
+    $("#dRepairPerson").textContent =
+      row.repairPerson;
+
+    $("#dRepairTime").textContent =
+      row.repairTime;
+
+
+    $("#detailPartsBody").innerHTML = `
+
+      <tr>
+
+        <td>
+          ${escapeHtml(row.spareCode)}
+        </td>
+
+        <td>
+          ${escapeHtml(row.spareName)}
+        </td>
+
+        <td>
+          ${escapeHtml(row.spareDesc)}
+        </td>
+
+        <td>
+          ${escapeHtml(row.quantity)}
+        </td>
+
+      </tr>
+
+    `;
+
+
+    $("#detailModal")
+      .classList
+      .add("show");
+
+  }
+
+
+  function closeRepairDetail() {
+
+    $("#detailModal")
+      .classList
+      .remove("show");
+
+  }
+
+
+  function searchRows() {
+
+    const kw =
+      prompt(
+        "请输入备件编码、备件名称、维修单号、设备编码或设备名称"
+      );
+
+
+    if (
+      kw == null
+    )
+      return;
+
+
+    const q =
+      kw
+        .trim()
+        .toLowerCase();
+
+
+    if (!q) {
+
+      currentRows =
+        [...rows];
+
+      renderTable();
+
+      return;
+
+    }
+
+
+    currentRows =
+      rows.filter((r) => {
+
+        return (
+
+          r.spareCode
+            .toLowerCase()
+            .includes(q)
+
+          ||
+
+          r.spareName
+            .toLowerCase()
+            .includes(q)
+
+          ||
+
+          r.spareDesc
+            .toLowerCase()
+            .includes(q)
+
+          ||
+
+          r.repairOrderNo
+            .toLowerCase()
+            .includes(q)
+
+          ||
+
+          r.deviceCode
+            .toLowerCase()
+            .includes(q)
+
+          ||
+
+          r.deviceName
+            .toLowerCase()
+            .includes(q)
+
+        );
+
+      });
+
+
+    renderTable();
+
+
+    showToast(
+      `筛选到 ${currentRows.length} 条`
+    );
+
+  }
+
+
+  function exportCsv() {
+
+    const headers = [
+      "备品备件编码",
+      "备品备件名称",
+      "备品备件描述",
+      "使用数量",
+      "维修单号",
+      "设备编码",
+      "设备名称"
+    ];
+
+
+    const lines = [
+      headers
+    ];
+
+
+    currentRows.forEach((r) => {
+
+      lines.push([
+        r.spareCode,
+        r.spareName,
+        r.spareDesc,
+        r.quantity,
+        r.repairOrderNo,
+        r.deviceCode,
+        r.deviceName
+      ]);
+
+    });
+
+
+    const csv =
+      lines
+        .map((line) =>
+
+          line
+            .map((cell) =>
+
+              `"${String(cell ?? "")
+                .replace(/"/g, '""')}"`
+
+            )
+            .join(",")
+
+        )
+        .join("\n");
+
+
+    const blob =
+      new Blob(
+        [
+          "\ufeff" + csv
+        ],
+        {
+          type:
+            "text/csv;charset=utf-8;"
+        }
+      );
+
+
+    const url =
+      URL.createObjectURL(
+        blob
+      );
+
+
+    const a =
+      document.createElement(
+        "a"
+      );
+
+
+    a.href =
+      url;
+
+    a.download =
+      "备品备件使用.csv";
+
+    document.body
+      .appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+    URL.revokeObjectURL(
+      url
+    );
+
+
+    showToast(
+      "导出成功"
+    );
+
+  }
+
+
+  $("#btnSearch")
+    .addEventListener(
+      "click",
+      searchRows
+    );
+
+
+  $("#btnQuery")
+    .addEventListener(
+      "click",
+      () => {
+
+        renderTable();
+
+        showToast(
+          "查询完成"
+        );
+
+      }
+    );
+
+
+  $("#btnRefresh")
+    .addEventListener(
+      "click",
+      () => {
+
+        currentRows =
+          [...rows];
+
+        renderTable();
+
+        showToast(
+          "已刷新"
+        );
+
+      }
+    );
+
+
+  $("#btnReset")
+    .addEventListener(
+      "click",
+      () => {
+
+        currentRows =
+          [...rows];
+
+        renderTable();
+
+        showToast(
+          "表单已重置"
+        );
+
+      }
+    );
+
+
+  $("#btnClearAll")
+    .addEventListener(
+      "click",
+      () => {
+
+        currentRows =
+          [];
+
+        renderTable();
+
+        showToast(
+          "已清空当前显示"
+        );
+
+      }
+    );
+
+
+  $("#btnAdvanced")
+    .addEventListener(
+      "click",
+      () => {
+
+        showToast(
+          "高级查询配置（演示）"
+        );
+
+      }
+    );
+
+
+  $("#btnExport")
+    .addEventListener(
+      "click",
+      exportCsv
+    );
+
+
+  $("#modalClose")
+    .addEventListener(
+      "click",
+      closeRepairDetail
+    );
+
+
+  $("#modalCloseBtn")
+    .addEventListener(
+      "click",
+      closeRepairDetail
+    );
+
+
+  $("#detailModal")
+    .addEventListener(
+      "click",
+      (e) => {
+
+        if (
+          e.target ===
+          $("#detailModal")
+        ) {
+
+          closeRepairDetail();
+
+        }
+
+      }
+    );
+
+
+  document
+    .addEventListener(
+      "keydown",
+      (e) => {
+
+        if (
+          e.key === "Escape"
+        ) {
+
+          closeRepairDetail();
+
+        }
+
+      }
+    );
+
+
+  renderTable();
+
+</script>
+
+</body>
+</html>
