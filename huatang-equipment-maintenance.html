@@ -1,0 +1,1959 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>设备维修单 - 华糖智能设备</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --blue:#409eff;
+  --blue-dark:#1677e8;
+  --line:#e3e8f0;
+  --bg:#f2f4f7;
+  --text:#303744;
+  --muted:#8a94a5;
+}
+body{
+  margin:0;
+  font:14px "Microsoft YaHei","PingFang SC",Arial,sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.48}
+[hidden]{display:none!important}
+.topbar{
+  height:58px;background:white;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;border-bottom:1px solid var(--line);
+}
+.breadcrumb{color:#9ca7b8}
+.breadcrumb strong{color:#4a5567;font-weight:500}
+.topright{color:#717d91}
+.tabs{
+  height:45px;background:white;display:flex;
+  align-items:end;gap:6px;padding:0 12px;
+}
+.tab{
+  border:1px solid #d8e1ee;
+  padding:8px 15px;background:white;color:#657184;
+}
+.tab.active{background:var(--blue);color:white}
+main{padding:12px}
+.panel{
+  background:#fff;border-radius:6px;
+  margin-bottom:12px;padding:14px;
+  box-shadow:0 1px 3px #d9e0ea66;
+}
+.searchbar{
+  display:flex;align-items:center;
+  justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.btn{
+  border:1px solid #d7dfe9;background:#fff;
+  padding:9px 16px;border-radius:4px;color:#495568;
+}
+.btn.blue{background:var(--blue);color:white;border-color:var(--blue)}
+.btn.green{background:#67c23a;color:white;border-color:#67c23a}
+.btn.red{background:#f56c6c;color:white;border-color:#f56c6c}
+.btn.orange{background:#e6a23c;color:white;border-color:#e6a23c}
+.btn:hover:not(:disabled){filter:brightness(.97)}
+.btn.small{padding:6px 10px}
+.filters{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;margin-top:16px;
+}
+.field{display:flex;align-items:center;gap:10px;min-width:0}
+.field label{
+  width:108px;flex:none;text-align:right;
+  color:#647084;
+}
+.field input,.field select,.field textarea{
+  min-width:0;width:100%;border:1px solid #d9e0ea;
+  border-radius:4px;padding:9px 10px;background:white;color:#364152;
+}
+.field textarea{min-height:72px;resize:vertical}
+.field input:disabled,.field select:disabled,.field textarea:disabled{
+  background:#f5f7fa;color:#727e8e;
+}
+.panel-title{
+  color:var(--blue);font-weight:600;
+  padding-bottom:12px;border-bottom:1px solid var(--line);
+}
+.toolbar{
+  display:flex;justify-content:space-between;
+  align-items:center;margin:12px 0;gap:10px;
+}
+.toolbar-left{display:flex;gap:8px}
+.table-wrap{width:100%;overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+.list-table{min-width:1100px}
+th{
+  background:#f4f6fa;color:#586478;font-weight:600;
+  border:1px solid #e4e9f0;padding:12px 9px;
+  white-space:nowrap;
+}
+td{
+  border:1px solid #e7ebf2;padding:12px 9px;
+  text-align:center;
+}
+tbody tr:hover{background:#f4f9ff}
+.link{
+  border:0;background:none;color:var(--blue-dark);
+  padding:2px 5px;
+}
+.link:hover{text-decoration:underline}
+.status{
+  display:inline-block;border-radius:4px;
+  padding:5px 9px;font-size:12px;white-space:nowrap;
+  background:#f1f2f4;color:#7b8492;
+}
+.s-blue{background:#e5f1ff;color:#2789ed}
+.s-orange{background:#fff1df;color:#d88b1d}
+.s-green{background:#e5f8ee;color:#20a66b}
+.s-red{background:#ffeded;color:#ec5c61}
+.pager{
+  display:flex;justify-content:flex-end;
+  align-items:center;gap:12px;padding-top:14px;color:#697487;
+}
+.empty{padding:45px;text-align:center;color:#95a0ae}
+.overlay{
+  position:fixed;inset:0;background:#18233980;
+  z-index:100;display:flex;align-items:center;
+  justify-content:center;padding:15px;
+}
+.dialog{
+  width:min(1200px,98vw);height:min(92vh,940px);
+  background:#fff;border-radius:7px;
+  display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 16px 55px #0003;
+}
+.dialog-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:15px 23px;border-bottom:1px solid var(--line);
+}
+.dialog-head h2{font-size:17px;margin:0}
+.dialog-body{padding:18px 24px;overflow:auto;flex:1}
+.dialog-foot{
+  padding:13px 22px;background:white;border-top:1px solid var(--line);
+  display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;
+}
+.summary{
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:10px;margin-bottom:15px;
+}
+.summary>div{background:#f6f8fc;padding:10px;border-radius:4px}
+.summary small{display:block;color:#8b96a7;margin-bottom:5px}
+.summary b{font-size:13px;overflow-wrap:anywhere}
+.steps{
+  display:flex;gap:8px;margin-bottom:17px;
+}
+.step{
+  flex:1;text-align:center;background:#f4f6fa;color:#8893a4;
+  padding:10px 4px;border-radius:4px;
+}
+.step.active{background:#e8f2ff;color:var(--blue-dark);font-weight:600}
+.section{
+  border:1px solid var(--line);
+  border-radius:5px;margin-bottom:14px;overflow:hidden;
+}
+.section-title{
+  background:#f6f9fd;border-bottom:1px solid var(--line);
+  padding:11px 14px;color:#347fd1;font-weight:600;
+  display:flex;justify-content:space-between;
+}
+.section-content{padding:18px 16px}
+.form-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px 18px;
+}
+.form-grid .field label{width:105px}
+.full{grid-column:1/-1}
+.full .field label{width:105px}
+.photo-list{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px}
+.photo-item{position:relative}
+.photo-item img{
+  width:92px;height:76px;object-fit:cover;
+  border:1px solid var(--line);border-radius:4px;
+}
+.photo-item button{
+  position:absolute;right:0;top:0;
+  border:0;background:#e94c4c;color:white;
+}
+.parts-table{min-width:650px}
+.parts-table input{
+  width:100%;padding:7px;border:1px solid #dce3ed;border-radius:3px;
+}
+.note{font-size:12px;color:#909aaa;line-height:1.7}
+.history{
+  padding:7px 3px;color:#667385;font-size:13px;
+}
+.history div{padding:7px;border-bottom:1px dashed #e4e8f0}
+.toast{
+  position:fixed;bottom:25px;left:50%;transform:translateX(-50%);
+  background:#253449;color:white;padding:11px 22px;
+  border-radius:5px;z-index:200;display:none;
+}
+@media(max-width:950px){
+  .filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .form-grid{grid-template-columns:1fr}
+  .field label{width:100px!important}
+  .dialog{height:96vh}
+}
+@media(max-width:600px){
+  .filters{grid-template-columns:1fr}
+  .dialog-body{padding:12px}
+  .section-content{padding:12px}
+  .topbar{padding:0 10px}
+}
+
+/* ===== 设备维修单详情：企业管理表单风格 ===== */
+
+/* 顶部工单状态 */
+.detail-flow-line {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:4px 0 12px;
+  color:#606b7d;
+  font-size:13px;
+}
+
+/* 流程状态：简洁横向进度条 */
+.steps {
+  display:flex;
+  gap:14px;
+  margin-bottom:18px;
+  border-bottom:1px solid #e4e8ef;
+  padding-bottom:10px;
+}
+
+.step {
+  flex:1;
+  text-align:center;
+  background:#f5f7fa;
+  color:#8994a6;
+  padding:10px 8px;
+  border-radius:3px;
+  font-size:13px;
+}
+
+.step.active {
+  background:#e6f2ff;
+  color:#409eff;
+  font-weight:600;
+}
+
+/* 去掉原来的大卡片边框 */
+.section {
+  border:0;
+  border-radius:0;
+  border-bottom:1px solid #e5e9f0;
+  margin-bottom:14px;
+  overflow:visible;
+}
+
+/* 分区标题沿用蓝色企业后台风格 */
+.section-title {
+  background:#fff;
+  color:#409eff;
+  border-bottom:1px solid #e5e9f0;
+  padding:12px 2px;
+  font-size:14px;
+  font-weight:600;
+}
+
+/* 分区内容 */
+.section-content {
+  padding:20px 2px;
+}
+
+/* 两列横向字段布局 */
+.form-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px 24px;
+}
+
+/* 左侧字段名称 */
+.form-grid .field {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+
+.form-grid .field label,
+.full .field label {
+  width:120px;
+  min-width:120px;
+  flex:none;
+  text-align:right;
+  color:#606a78;
+  font-size:14px;
+}
+
+/* 右侧矩形输入框 */
+.form-grid .field input,
+.form-grid .field select,
+.form-grid .field textarea {
+  flex:1;
+  min-width:0;
+  width:100%;
+  height:39px;
+  border:1px solid #dce2eb;
+  border-radius:4px;
+  padding:8px 12px;
+  font-size:13px;
+  background:#fff;
+  color:#303744;
+}
+
+/* 多行文本框 */
+.form-grid .field textarea {
+  height:auto;
+  min-height:78px;
+  resize:vertical;
+}
+
+/* 已提交内容只读时显示浅灰底 */
+.form-grid .field input:disabled,
+.form-grid .field select:disabled,
+.form-grid .field textarea:disabled {
+  background:#f4f6f9;
+  color:#7a8493;
+  border-color:#dce2eb;
+  opacity:1;
+}
+
+/* 扫码按钮保持独立 */
+.form-grid .field .btn {
+  flex:none;
+}
+
+/* 弹窗适配 */
+.dialog {
+  width:min(1200px,98vw);
+}
+
+/* 平板适配 */
+@media(max-width:850px) {
+  .form-grid {
+    grid-template-columns:1fr;
+  }
+
+  .form-grid .field label,
+  .full .field label {
+    width:110px;
+    min-width:110px;
+  }
+}
+
+
+/* HUATANG REV4 - 设备维修单选择弹窗 */
+
+.lookup-field {
+  display:flex;
+  flex:1;
+  min-width:0;
+  height:39px;
+}
+
+.lookup-field input {
+  min-width:0!important;
+  flex:1;
+  border-radius:4px 0 0 4px!important;
+  cursor:pointer;
+}
+
+.lookup-field .lookup-btn {
+  width:43px;
+  flex:none;
+  border:1px solid #dce2eb;
+  border-left:0;
+  border-radius:0 4px 4px 0;
+  background:#f8fafc;
+  color:#718096;
+  font-size:20px;
+  cursor:pointer;
+}
+.lookup-btn:disabled {cursor:not-allowed;opacity:.6}
+
+.assign-self {
+  margin-left:132px;
+  color:#647084;
+}
+
+.lookup-layer {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.48);
+  z-index:300;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+}
+.lookup-layer[hidden] {display:none!important}
+
+.lookup-dialog {
+  background:#fff;
+  width:min(1020px,98vw);
+  max-height:90vh;
+  border-radius:8px;
+  box-shadow:0 14px 40px #0003;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.lookup-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:17px 22px;
+  border-bottom:1px solid #e4e9f0;
+  font-size:17px;
+  font-weight:500;
+}
+.lookup-close {
+  border:0;
+  background:transparent;
+  color:#8e98a8;
+  font-size:28px;
+  cursor:pointer;
+}
+.lookup-tools {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:20px;
+  flex-wrap:wrap;
+}
+.lookup-filter {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex:1;
+  min-width:250px;
+}
+.lookup-filter label {white-space:nowrap}
+.lookup-filter input {
+  flex:1;
+  min-width:0;
+  height:39px;
+  padding:8px 12px;
+  border:1px solid #dce2eb;
+  border-radius:4px;
+}
+.lookup-table-wrap {
+  overflow:auto;
+  padding:0 20px;
+  flex:1;
+  min-height:120px;
+}
+.lookup-table th {
+  background:#f4f6fa;
+  white-space:nowrap;
+  padding:12px 9px;
+}
+.lookup-table td {padding:12px 9px}
+.lookup-table tr[data-pick] {cursor:pointer}
+.lookup-bottom {
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:12px;
+  padding:16px 20px;
+}
+.lookup-foot {
+  border-top:1px solid #e4e9f0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 20px;
+}
+.detail-flow-line {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+  color:#606b7d;
+}
+@media(max-width:850px) {
+  .lookup-dialog {max-height:95vh}
+  .lookup-tools {align-items:stretch}
+  .lookup-filter {min-width:100%}
+  .assign-self {margin-left:122px}
+}
+
+
+/* HT_EQUIPMENT_REV5 */
+
+/* 所有选择弹窗单击整行 */
+.lookup-table tr[data-pick] {
+  cursor: pointer;
+}
+.lookup-table tr[data-pick]:hover {
+  background: #eaf4ff;
+}
+
+/* 设备编码旁的扫码按钮 */
+.form-grid .field .equip-scan-btn {
+  flex: none;
+  height: 39px;
+  padding: 7px 12px;
+  white-space: nowrap;
+}
+
+/* 扫码弹窗 */
+.equip-scan-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(18,30,52,.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+}
+.equip-scan-layer[hidden] {
+  display: none !important;
+}
+.equip-scan-panel {
+  width: min(540px,95vw);
+  max-height: 90vh;
+  overflow: auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 16px 55px #0003;
+  padding: 22px;
+}
+.equip-scan-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.equip-scan-head strong {
+  font-size: 17px;
+}
+.equip-scan-panel video {
+  display: block;
+  width: 100%;
+  height: 230px;
+  background: #17212f;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.equip-scan-status {
+  color: #6b7280;
+  font-size: 13px;
+  margin: 12px 0;
+  line-height: 1.6;
+}
+.equip-scan-input {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.equip-scan-input input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid #dbe3ed;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* 不可编辑字段统一灰底 */
+#detailBody input:disabled,
+#detailBody select:disabled,
+#detailBody textarea:disabled {
+  background: #f4f6f9 !important;
+  color: #7b8492 !important;
+  border-color: #dce2eb !important;
+  opacity: 1;
+}
+
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <div>
+    <span style="font-size:19px;margin-right:18px">☰</span>
+    <span class="breadcrumb">首页 / 智能设备 / <strong>设备维修单</strong></span>
+  </div>
+  <div class="topright">⌕　⛶　◐　▣　管理员 ●</div>
+</header>
+
+<div class="tabs">
+  <div class="tab">首页</div>
+  <div class="tab active">● 设备维修单 ×</div>
+</div>
+
+<main>
+  <section class="panel">
+    <div class="searchbar">
+      <button class="btn" id="advancedBtn">高级查询配置 ▾</button>
+      <div>
+        <button class="btn" id="clearBtn">全部清空</button>
+        <button class="btn orange" id="resetBtn">重置表单</button>
+        <button class="btn blue" id="searchBtn">数据查询</button>
+      </div>
+    </div>
+
+    <div class="filters" id="filters" hidden>
+      <div class="field"><label>维修单号</label>
+        <input id="qId" placeholder="输入维修单号">
+      </div>
+      <div class="field"><label>设备编码/名称</label>
+        <input id="qDevice" placeholder="输入设备信息">
+      </div>
+      <div class="field"><label>维护状态</label>
+        <select id="qStatus">
+          <option value="">全部状态</option>
+          <option>草稿</option><option>待接单</option>
+          <option>维修中</option><option>待验收</option>
+          <option>已完成</option><option>已退回</option>
+        </select>
+      </div>
+      <div class="field"><label>故障类型</label>
+        <input id="qFault" placeholder="输入故障类型">
+      </div>
+      <div class="field"><label>报修开始日期</label>
+        <input id="qFrom" type="date">
+      </div>
+      <div class="field"><label>报修结束日期</label>
+        <input id="qTo" type="date">
+      </div>
+      <div class="field"><label>维修人</label>
+        <input id="qRepairer" placeholder="输入维修人">
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-title">表格数据</div>
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="btn green" id="addBtn">新增</button>
+        <button class="btn blue" id="editBtn">编辑</button>
+        <button class="btn red" id="deleteBtn">删除</button>
+        <button class="btn blue" id="exportBtn">导出</button>
+      </div>
+      <div style="color:#93a1b3">⌕　↻　▦</div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="list-table">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="selectAll"></th>
+            <th>维修单号</th>
+            <th>设备编码</th>
+            <th>设备名称</th>
+            <th>报修时间</th>
+            <th>故障类型</th>
+            <th>紧急程度</th>
+            <th>设备运行状态</th>
+            <th>维护状态</th>
+            <th>报修人</th>
+            <th>维修人</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="pager">
+      <span id="recordCount">共0条</span>
+      <span>10条/页</span>
+      <button class="btn small" id="prevPage">‹</button>
+      <span id="pageLabel">1</span>
+      <button class="btn small" id="nextPage">›</button>
+    </div>
+  </section>
+</main>
+
+<div class="overlay" id="modal" hidden>
+  <div class="dialog">
+    <div class="dialog-head">
+      <h2>设备维修单详情</h2>
+      <button class="btn small" id="closeModal">✕ 关闭</button>
+    </div>
+    <div class="dialog-body" id="detailBody"></div>
+    <div class="dialog-foot" id="detailFooter"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+const STORAGE_KEY = "huatang_repair_demo_v2";
+
+const equipmentMap = {
+  P3203:["回溶糖浆输送泵","溶糖间"],
+  P3301:["饱充糖浆泵","饱充"],
+  P3305:["清汁糖浆泵","压滤"],
+  T3310:["石灰乳搅拌电机","石灰乳间"],
+  P3401:["脱色糖浆泵","离交脱色"],
+  P3611:["水环真空泵","结晶"],
+  E3601:["1#煮糖罐","结晶"]
+};
+
+const demoOrders = [
+  {
+    id:"SBWX20261021001",equipmentCode:"P3203",
+    equipmentName:"回溶糖浆输送泵",department:"溶糖间",
+    reportTime:"2026-10-21T16:46",
+    faultType:"振动异常",urgency:"高",
+    machineState:"故障停机",status:"维修中",
+    reporter:"李四",phone:"",repairer:"王工",
+    group:"机修组",cc:"",orderType:"故障维修",
+    faultDescription:"运行过程中振动升高，伴随异常声响。",
+    repairItem:"轴承检查",cause:"待进一步排查",
+    solution:"",repairResult:"维修处理中",
+    repairStart:"2026-10-21T17:00",repairEnd:"",
+    acceptance:"",parts:[],reportPhotos:[],repairPhotos:[],
+    history:["2026-10-21 16:46 李四提交报修","2026-10-21 17:00 王工接单"]
+  },
+  {
+    id:"SBWX20261021002",equipmentCode:"T3310",
+    equipmentName:"石灰乳搅拌电机",department:"石灰乳间",
+    reportTime:"2026-10-21T15:20",
+    faultType:"电机过热",urgency:"高",
+    machineState:"运行异常",status:"待接单",
+    reporter:"张三",repairer:"刘工",group:"机修组",
+    orderType:"故障维修",faultDescription:"电机温度持续偏高。",
+    parts:[],reportPhotos:[],repairPhotos:[],history:[]
+  },
+  {
+    id:"SBWX20261020003",equipmentCode:"P3301",
+    equipmentName:"饱充糖浆泵",department:"饱充",
+    reportTime:"2026-10-20T11:32",
+    faultType:"轴承损坏",urgency:"中",
+    machineState:"故障停机",status:"待验收",
+    reporter:"王五",repairer:"陈工",group:"机修组",
+    orderType:"故障维修",
+    faultDescription:"运行时轴承异响。",
+    repairItem:"轴承更换",
+    cause:"轴承磨损",solution:"更换轴承并补充润滑",
+    repairResult:"已修复",
+    parts:[{code:"BJ001",name:"轴承",desc:"维修更换",qty:"2"}],
+    reportPhotos:[],repairPhotos:[],history:[]
+  },
+  {
+    id:"SBWX20261019004",equipmentCode:"P3401",
+    equipmentName:"脱色糖浆泵",department:"离交脱色",
+    reportTime:"2026-10-19T08:43",
+    faultType:"密封泄漏",urgency:"中",
+    machineState:"运行正常",status:"已完成",
+    reporter:"赵六",repairer:"刘工",group:"机修组",
+    orderType:"故障维修",
+    faultDescription:"泵机械密封出现渗漏。",
+    cause:"密封件老化",solution:"更换机械密封",
+    repairResult:"已修复",acceptance:"试运行正常",
+    parts:[],reportPhotos:[],repairPhotos:[],history:[]
+  }
+];
+
+let orders;
+try{
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  orders = Array.isArray(saved) ? saved : demoOrders;
+}catch(e){
+  orders = demoOrders;
+}
+
+let selected = new Set();
+let active = null;
+let page = 1;
+const pageSize = 10;
+const $ = id => document.getElementById(id);
+
+function esc(v){
+  return String(v ?? "").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function now(){
+  const d = new Date();
+  const p = n=>String(n).padStart(2,"0");
+  return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())
+    +"T"+p(d.getHours())+":"+p(d.getMinutes());
+}
+function displayDate(t){
+  return String(t||"--").replace("T"," ");
+}
+function toast(msg){
+  const el=$("toast");
+  el.textContent=msg;el.style.display="block";
+  setTimeout(()=>el.style.display="none",2400);
+}
+function persist(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(orders));
+    return true;
+  }catch(e){
+    alert("浏览器本地存储空间不足，请减少上传图片。");
+    return false;
+  }
+}
+function clone(v){
+  return JSON.parse(JSON.stringify(v));
+}
+function statusClass(v){
+  return ({
+    "草稿":"s-orange","待接单":"s-orange",
+    "维修中":"s-blue","待验收":"s-orange",
+    "已完成":"s-green","已退回":"s-red"
+  })[v]||"";
+}
+function badge(v){
+  return '<span class="status '+statusClass(v)+'">'+esc(v||"--")+'</span>';
+}
+function getFilters(){
+  return {
+    id:$("qId").value.trim(),
+    device:$("qDevice").value.trim(),
+    status:$("qStatus").value,
+    fault:$("qFault").value.trim(),
+    from:$("qFrom").value,
+    to:$("qTo").value,
+    repairer:$("qRepairer").value.trim()
+  };
+}
+function matchedOrders(){
+  const q=getFilters();
+  return orders.filter(o=>
+    String(o.id||"").includes(q.id) &&
+    (String(o.equipmentCode||"")+String(o.equipmentName||"")).includes(q.device) &&
+    (!q.status||o.status===q.status) &&
+    String(o.faultType||"").includes(q.fault) &&
+    (!q.from||String(o.reportTime||"").slice(0,10)>=q.from) &&
+    (!q.to||String(o.reportTime||"").slice(0,10)<=q.to) &&
+    String(o.repairer||"").includes(q.repairer)
+  ).sort((a,b)=>String(b.reportTime||"").localeCompare(String(a.reportTime||"")));
+}
+function renderList(){
+  const data=matchedOrders();
+  const pages=Math.max(1,Math.ceil(data.length/pageSize));
+  page=Math.min(page,pages);
+  const items=data.slice((page-1)*pageSize,page*pageSize);
+  $("tableBody").innerHTML=items.map(o=>`
+    <tr data-row-id="${esc(o.id)}">
+      <td><input type="checkbox" data-select="${esc(o.id)}" ${selected.has(o.id)?"checked":""}></td>
+      <td><button class="link" data-open="${esc(o.id)}">${esc(o.id)}</button></td>
+      <td>${esc(o.equipmentCode||"--")}</td>
+      <td>${esc(o.equipmentName||"--")}</td>
+      <td>${esc(displayDate(o.reportTime))}</td>
+      <td>${esc(o.faultType||"--")}</td>
+      <td>${badge(o.urgency)}</td>
+      <td>${esc(o.machineState||"--")}</td>
+      <td>${badge(o.status)}</td>
+      <td>${esc(o.reporter||"--")}</td>
+      <td>${esc(o.repairer||"--")}</td>
+      
+    </tr>
+  `).join("")||'<tr><td colspan="11" class="empty">暂无符合条件的工单</td></tr>';
+
+  $("recordCount").textContent="共 "+data.length+" 条";
+  $("pageLabel").textContent=page+" / "+pages;
+  $("prevPage").disabled=page<=1;
+  $("nextPage").disabled=page>=pages;
+  $("selectAll").checked=items.length>0&&items.every(o=>selected.has(o.id));
+}
+// 静态Demo模拟登录信息。
+// 将来接入正式后台时，由真实登录接口提供用户姓名和联系电话。
+const CURRENT_LOGIN_USER = window.HUATANG_LOGIN_USER || {
+  name: "演示登录用户",
+  phone: "未绑定"
+};
+
+function createOrder(){
+  const stamp = now().replace(/[-T:]/g,"");
+  let id = "SBWX" + stamp;
+  while(orders.some(o=>o.id===id)){
+    id += "1";
+  }
+  return {
+    id,
+    equipmentCode:"",
+    equipmentName:"",
+    department:"",
+    reportTime:"",
+    faultType:"",
+    urgency:"中",
+    machineState:"运行异常",
+    status:"草稿",
+    reporter:CURRENT_LOGIN_USER.name,
+    phone:CURRENT_LOGIN_USER.phone,
+    repairer:"",
+    group:"",
+    cc:"",
+    orderType:"故障维修",
+    faultDescription:"",
+    repairItem:"",
+    cause:"",
+    solution:"",
+    repairResult:"维修处理中",
+    repairStart:"",
+    repairEnd:"",
+    acceptance:"",
+    parts:[],
+    reportPhotos:[],
+    repairPhotos:[],
+    history:[]
+  };
+}
+
+function openOrder(id){
+  active=id?clone(orders.find(x=>x.id===id)):createOrder();
+  if(!active)return;
+  active.parts ||= [];
+  active.reportPhotos ||= [];
+  active.repairPhotos ||= [];
+  active.history ||= [];
+  $("modal").hidden=false;
+  drawDetail();
+}
+function editableReport(){
+  return ["草稿","已退回"].includes(active.status);
+}
+function editableRepair(){
+  return ["待接单","维修中","待验收"].includes(active.status);
+}
+
+function editableAcceptance(){
+  return active.status==="待验收";
+}
+function control(label,key,canEdit,options=null,type="text"){
+  const value=active[key]??"";
+  let input;
+  if(options){
+    input=`<select data-field="${key}" ${canEdit?"":"disabled"}>
+      ${options.map(v=>`<option value="${esc(v)}" ${v===value?"selected":""}>${esc(v)}</option>`).join("")}
+    </select>`;
+  }else{
+    input=`<input data-field="${key}" type="${type}"
+      value="${esc(value)}" ${canEdit?"":"disabled"}>`;
+  }
+  return `<div class="field"><label>${label}</label>${input}</div>`;
+}
+function textarea(label,key,canEdit){
+  return `<div class="field"><label>${label}</label>
+    <textarea data-field="${key}" ${canEdit?"":"disabled"}>${esc(active[key]||"")}</textarea>
+  </div>`;
+}
+function photos(title,key,canEdit){
+  const arr=active[key]||[];
+  return `<div class="full">
+    <div style="margin:8px 0;color:#647084">${title}</div>
+    ${canEdit?`<input type="file" data-photo="${key}" accept="image/*" multiple>`:""}
+    <div class="photo-list">
+    ${arr.map((src,i)=>`<div class="photo-item">
+      <img src="${src}" alt="${title}">
+      ${canEdit?`<button data-remove-photo="${key}" data-index="${i}">×</button>`:""}
+    </div>`).join("")}
+    </div>
+    <div class="note">支持多张图片；演示版会压缩图片后保存在当前浏览器。</div>
+  </div>`;
+}
+function partsTable(canEdit){
+  const parts = active.parts || [];
+
+  return `
+    <div class="table-wrap">
+      <table class="parts-table">
+        <thead>
+          <tr>
+            <th>备品备件编码</th>
+            <th>备品备件名称</th>
+            <th>备品备件描述</th>
+            <th>使用数量</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+        ${parts.map((p,i)=>`
+          <tr data-part-row="${i}">
+            <td><input data-part-key="code"
+              value="${esc(p.code||"")}" readonly></td>
+            <td><input data-part-key="name"
+              value="${esc(p.name||"")}" readonly></td>
+            <td><input data-part-key="desc"
+              value="${esc(p.desc||"")}" readonly></td>
+            <td><input data-part-key="qty"
+              type="number" min="1" step="1"
+              value="${esc(p.qty||"1")}"
+              ${canEdit?"":"disabled"}></td>
+            <td>${canEdit
+              ? `<button class="link" data-remove-part="${i}">删除</button>`
+              : "--"}</td>
+          </tr>
+        `).join("")}
+        </tbody>
+      </table>
+    </div>
+    ${canEdit
+      ? `<p><button class="btn blue"
+          data-lookup="part">+ 选择备品备件</button></p>`
+      : ""}
+  `;
+}
+
+function drawDetail(){
+  // 维修中的实际维修人自动取当前登录用户
+  // 已完成工单保留历史维修人，不覆盖历史记录
+  if(active && active.status === "维修中"){
+    active.repairer = CURRENT_LOGIN_USER.name;
+  }
+
+  const report = editableReport();
+  const repair = editableRepair();
+
+  const stages = ["待接单","维修中","已完成"];
+  const index = stages.indexOf(active.status);
+
+  $("detailBody").innerHTML = `
+
+    <div class="detail-flow-line">
+      <span>维修单号：${esc(active.id)}</span>
+      ${badge(active.status)}
+    </div>
+
+    <div class="steps">
+      ${stages.map((s,i)=>`
+        <div class="step ${index===i?"active":""}">
+          ${i+1}. ${s}
+        </div>
+      `).join("")}
+    </div>
+
+    <div class="section">
+      <div class="section-title">① 设备报修信息</div>
+
+      <div class="section-content">
+        <div class="form-grid">
+
+          ${control("维修单号","id",false)}
+
+          <div class="field">
+            <label>设备编码 *</label>
+            <div class="lookup-field">
+              <input data-field="equipmentCode"
+                data-lookup="${report?"equipment":""}"
+                value="${esc(active.equipmentCode)}"
+                placeholder="点击选择设备" ${report?"readonly":"disabled"}>
+              <button type="button" class="lookup-btn"
+                data-lookup="equipment"
+                ${report?"":"disabled"}>⌕</button>
+            </div>
+            ${report?'<button type="button" class="btn small equip-scan-btn" data-equip-scan>扫码</button>':""}
+          </div>
+
+          ${control("设备名称","equipmentName",false)}
+          ${control("报修时间","reportTime",false,null,"datetime-local")}
+
+          ${control("工单类型","orderType",report,
+            ["故障维修","紧急抢修","外委维修","其他"])}
+
+          ${control("故障类型","faultType",report,
+            ["","振动异常","电机过热","轴承损坏",
+             "密封泄漏","压力波动","温度偏高",
+             "阀门异常","管路堵塞","其他"])}
+
+          ${control("紧急程度","urgency",report,
+            ["低","中","高"])}
+
+          ${control("设备运行状态","machineState",report,
+            ["运行正常","运行异常","故障停机","限制运行"])}
+
+          ${control("报修人","reporter",false)}
+          ${control("联系电话","phone",false)}
+
+          <div class="full">
+            ${textarea("故障描述","faultDescription",report)}
+          </div>
+
+          ${photos("故障照片","reportPhotos",report)}
+
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">② 接单与派工信息</div>
+
+      <div class="section-content">
+        <div class="form-grid">
+
+          <div class="field">
+            <label>维修人</label>
+            <div class="lookup-field">
+              <input data-field="repairer"
+                data-lookup="${report?"repairer":""}"
+                value="${esc(active.repairer||"")}"
+                placeholder="点击选择维修人员" ${report?"readonly":"disabled"}>
+              <button type="button" class="lookup-btn"
+                data-lookup="repairer"
+                ${report?"":"disabled"}>⌕</button>
+            </div>
+          </div>
+
+          ${control("维修组","group",false)}
+          ${control("抄送人","cc",report)}
+          ${control("维修开始时间","repairStart",
+            false,null,"datetime-local")}
+
+          ${report?`
+            <div class="full">
+              <label class="assign-self">
+                <input type="checkbox" id="assignSelf"
+                  ${active.repairer===CURRENT_LOGIN_USER.name?"checked":""}>
+                提给自己
+              </label>
+            </div>
+          `:""}
+
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">③ 现场维修反馈</div>
+
+      <div class="section-content">
+        <div class="form-grid">
+
+          ${control("维修项","repairItem",repair,
+            ["","电机检查维修","轴承检查",
+             "轴承更换","泵体维修","密封更换",
+             "阀门检查","管路清洗","其他"])}
+
+          ${control("维修结束时间","repairEnd",
+            false,null,"datetime-local")}
+
+          ${control("维修结果","repairResult",repair,
+            ["维修处理中","已修复","临时恢复",
+             "未修复","待备件"])}
+
+          <div></div>
+
+          <div class="full">
+            ${textarea("故障原因分析","cause",repair)}
+          </div>
+
+          <div class="full">
+            ${textarea("故障解决方案","solution",repair)}
+          </div>
+
+          ${photos("维修照片","repairPhotos",repair)}
+
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">④ 备品备件使用信息</div>
+      <div class="section-content">
+        ${partsTable(repair)}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">⑤ 工单处理记录</div>
+      <div class="section-content history">
+        ${(active.history||[]).map(x=>`
+          <div>${esc(x)}</div>
+        `).join("") || "<div>尚无流转记录</div>"}
+      </div>
+    </div>
+  `;
+
+  let buttons =
+    `<button class="btn" data-action="close">关闭</button>`;
+
+  if(report){
+    buttons += `
+      <button class="btn" data-action="saveDraft">暂存</button>
+      <button class="btn blue"
+        data-action="submitReport">提交报修</button>
+    `;
+  }
+  else if(repair){
+    buttons += `
+      <button class="btn orange"
+        data-action="transfer">转派工单</button>
+      <button class="btn"
+        data-action="saveRepair">暂存维修</button>
+      <button class="btn blue"
+        data-action="submitRepair">提交维修结果</button>
+    `;
+  }
+
+  $("detailFooter").innerHTML = buttons;
+
+  if(active.status === "已完成"){
+    $("detailBody")
+      .querySelectorAll("input, select, textarea, button")
+      .forEach(el => {
+        el.disabled = true;
+      });
+  }
+}
+
+function collectForm(){
+  if(!active)return;
+  document.querySelectorAll("#detailBody [data-field]").forEach(el=>{
+    active[el.dataset.field]=el.value;
+  });
+  active.parts=[...document.querySelectorAll("[data-part-row]")].map(tr=>{
+    const p={};
+    tr.querySelectorAll("[data-part-key]").forEach(el=>{
+      p[el.dataset.partKey]=el.value;
+    });
+    return p;
+  });
+}
+function saveActive(){
+  const index=orders.findIndex(o=>o.id===active.id);
+  if(index>=0)orders[index]=clone(active);
+  else orders.unshift(clone(active));
+  persist();renderList();
+}
+function logAction(text){
+  active.history ||= [];
+  active.history.push(displayDate(now())+" "+text);
+}
+function validateReport(){
+  if(!active.equipmentCode||!active.equipmentName||
+     !active.faultType||!active.faultDescription||!active.reporter){
+    toast("请补齐设备编码、设备名称、故障类型、故障描述、报修人");
+    return false;
+  }
+  return true;
+}
+function closeModal(){
+  $("modal").hidden=true;
+  active=null;
+}
+function doAction(action){
+  if(action==="close"){
+    closeModal();
+    return;
+  }
+
+  collectForm();
+
+  if(action==="saveDraft"){
+    active.reporter = CURRENT_LOGIN_USER.name;
+    active.phone = CURRENT_LOGIN_USER.phone;
+    active.reportTime = "";
+    saveActive();
+    toast("报修草稿已保存");
+    drawDetail();
+    return;
+  }
+
+  if(action==="submitReport"){
+    active.reporter = CURRENT_LOGIN_USER.name;
+    active.phone = CURRENT_LOGIN_USER.phone;
+
+    if(!validateReport())return;
+
+    // 只有正式提交报修才记录报修时间
+    active.reportTime = now();
+    active.status = "待接单";
+    logAction("提交设备报修");
+  }
+  else if(action==="saveRepair"){
+    active.repairer = CURRENT_LOGIN_USER.name;
+    if(active.status==="待接单"){
+      active.status="维修中";
+    }
+    if(!active.repairStart){
+      active.repairStart=now();
+    }
+    logAction("暂存现场维修反馈");
+  }
+  else if(action==="submitRepair"){
+    active.repairer = CURRENT_LOGIN_USER.name;
+    if(!active.cause?.trim() || !active.solution?.trim()){
+      toast("请填写故障原因分析和故障解决方案");
+      return;
+    }
+    if(!["已修复","临时恢复"].includes(active.repairResult)){
+      toast("维修结果须为已修复或临时恢复才可提交");
+      return;
+    }
+    if(!active.repairStart){
+      active.repairStart=now();
+    }
+
+    // 提交维修结果时自动记录维修结束时间
+    active.repairEnd=now();
+    active.status="已完成";
+    logAction("提交维修结果，工单已完成");
+  }
+  else return;
+
+  saveActive();
+  toast("操作成功");
+  drawDetail();
+}
+
+function imageToSmallDataURL(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onerror=()=>reject(new Error("读取失败"));
+    reader.onload=()=>{
+      const img=new Image();
+      img.onerror=()=>reject(new Error("图片读取失败"));
+      img.onload=()=>{
+        const canvas=document.createElement("canvas");
+        const ratio=Math.min(1,900/Math.max(img.width,img.height));
+        canvas.width=Math.max(1,Math.round(img.width*ratio));
+        canvas.height=Math.max(1,Math.round(img.height*ratio));
+        canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
+        resolve(canvas.toDataURL("image/jpeg",0.65));
+      };
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+$("tableBody").addEventListener("click",e=>{
+  const check=e.target.closest("[data-select]");
+  if(check){
+    const id=check.dataset.select;
+    if(check.checked)selected.add(id);else selected.delete(id);
+    return;
+  }
+  const btn=e.target.closest("[data-open]");
+  if(btn)openOrder(btn.dataset.open);
+});
+$("tableBody").addEventListener("dblclick",e=>{
+  if(e.target.closest("input"))return;
+  const row=e.target.closest("[data-row-id]");
+  if(row)openOrder(row.dataset.rowId);
+});
+$("detailFooter").addEventListener("click",e=>{
+  const b=e.target.closest("[data-action]");
+  if(b)doAction(b.dataset.action);
+});
+$("detailBody").addEventListener("click",e=>{
+  const a=e.target.closest("[data-action]");
+  if(a){doAction(a.dataset.action);return;}
+
+  const p=e.target.closest("[data-remove-part]");
+  if(p){
+    collectForm();
+    active.parts.splice(Number(p.dataset.removePart),1);
+    drawDetail();return;
+  }
+
+  const photo=e.target.closest("[data-remove-photo]");
+  if(photo){
+    collectForm();
+    active[photo.dataset.removePhoto].splice(Number(photo.dataset.index),1);
+    drawDetail();
+  }
+});
+$("detailBody").addEventListener("change",async e=>{
+  if(e.target.id==="assignSelf"){
+    collectForm();
+    if(e.target.checked)active.repairer=CURRENT_LOGIN_USER.name;
+    else if(active.repairer===CURRENT_LOGIN_USER.name)active.repairer="";
+    drawDetail();return;
+  }
+  const input=e.target.closest("[data-photo]");
+  if(!input)return;
+
+  collectForm();
+  const key=input.dataset.photo;
+  const files=[...input.files];
+  if(active[key].length+files.length>8){
+    toast("每个照片区域最多上传8张");return;
+  }
+  try{
+    for(const file of files){
+      if(!file.type.startsWith("image/"))continue;
+      active[key].push(await imageToSmallDataURL(file));
+    }
+    drawDetail();
+    toast("图片已加入，提交或暂存后保存");
+  }catch(err){
+    toast("图片读取失败");
+  }
+});
+$("addBtn").onclick=()=>openOrder();
+$("closeModal").onclick=closeModal;
+$("editBtn").onclick=()=>{
+  const id=[...selected][0];
+  if(!id){toast("请先选择一张维修单");return;}
+  openOrder(id);
+};
+$("deleteBtn").onclick=()=>{
+  if(selected.size===0){toast("请先选择维修单");return;}
+  if(!confirm("确认删除选中的演示工单吗？"))return;
+  orders=orders.filter(o=>!selected.has(o.id));
+  selected.clear();persist();renderList();toast("已删除");
+};
+$("selectAll").onchange=e=>{
+  const current=matchedOrders().slice((page-1)*pageSize,page*pageSize);
+  current.forEach(o=>e.target.checked?selected.add(o.id):selected.delete(o.id));
+  renderList();
+};
+$("advancedBtn").onclick=()=>{
+  $("filters").hidden=!$("filters").hidden;
+};
+$("searchBtn").onclick=()=>{page=1;renderList();};
+$("resetBtn").onclick=$("clearBtn").onclick=()=>{
+  document.querySelectorAll("#filters input").forEach(x=>x.value="");
+  $("qStatus").value="";page=1;renderList();
+};
+$("prevPage").onclick=()=>{page--;renderList();};
+$("nextPage").onclick=()=>{page++;renderList();};
+$("exportBtn").onclick=()=>{
+  const cols=[
+    ["id","维修单号"],["equipmentCode","设备编码"],
+    ["equipmentName","设备名称"],["reportTime","报修时间"],
+    ["faultType","故障类型"],["urgency","紧急程度"],
+    ["machineState","设备运行状态"],["status","维护状态"],
+    ["reporter","报修人"],["repairer","维修人"]
+  ];
+  const rows=[cols.map(x=>x[1]),...matchedOrders().map(o=>cols.map(x=>o[x[0]]||""))];
+  const csv="\uFEFF"+rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(",")).join("\r\n");
+  const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+  const a=document.createElement("a");
+  a.href=url;a.download="设备维修单.csv";a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+window.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&!$("modal").hidden)closeModal();
+});
+
+
+// HUATANG_MAINTENANCE_REV4
+// 以下是静态演示字典，将来可替换为设备/人员/备件正式接口
+
+const PERSON_CATALOG = [
+  {name:"王工",group:"机修组"},
+  {name:"刘工",group:"机修组"},
+  {name:"陈工",group:"机修组"},
+  {name:"张工",group:"电仪组"},
+  {name:"李工",group:"电仪组"},
+  {name:"赵工",group:"设备维修组"}
+];
+
+const PART_CATALOG = [
+  {code:"BYJ001",name:"冲压机备件01",
+   desc:"冲压机备用件",model:"01",category:"冲压机备用"},
+  {code:"BYJ002",name:"备用机02",
+   desc:"备用机02",model:"--",category:"通用备件"},
+  {code:"BYJ03-01",name:"电机轴承-A",
+   desc:"电机轴承",model:"--",category:"电机备件"},
+  {code:"BJ001",name:"轴承",
+   desc:"轴承更换用",model:"--",category:"通用备件"}
+];
+
+let lookupType="";
+let lookupPage=1;
+let lookupKeyword="";
+const lookupPageSize=8;
+
+const lookupLayer=document.createElement("div");
+lookupLayer.className="lookup-layer";
+lookupLayer.hidden=true;
+lookupLayer.innerHTML=`
+  <div class="lookup-dialog">
+    <div class="lookup-head">
+      <strong id="lookupTitle">选择信息</strong>
+      <button type="button" class="lookup-close"
+        id="lookupClose">×</button>
+    </div>
+    <div class="lookup-tools">
+      <div class="lookup-filter">
+        <label id="lookupSearchLabel">查询</label>
+        <input id="lookupSearch" placeholder="输入关键词查询">
+      </div>
+      <button class="btn blue" id="lookupSearchBtn">数据查询</button>
+      <button class="btn" id="lookupReset">重置表单</button>
+    </div>
+    <div class="lookup-table-wrap">
+      <table class="lookup-table">
+        <thead id="lookupThead"></thead>
+        <tbody id="lookupTbody"></tbody>
+      </table>
+    </div>
+    <div class="lookup-bottom">
+      <span id="lookupCount"></span>
+      <button class="btn small" id="lookupPrev">上一页</button>
+      <span id="lookupPageLabel"></span>
+      <button class="btn small" id="lookupNext">下一页</button>
+    </div>
+    <div class="lookup-foot">
+      <span class="note">演示字典数据，双击行或点击选择即可带出</span>
+      <button class="btn" id="lookupCancel">取消</button>
+    </div>
+  </div>
+`;
+document.body.appendChild(lookupLayer);
+
+function lookupData(){
+  if(lookupType==="equipment"){
+    return Object.entries(equipmentMap).map(([code,info])=>({
+      code,name:info[0]
+    }));
+  }
+  if(lookupType==="repairer"||lookupType==="transfer"){
+    return PERSON_CATALOG;
+  }
+  return PART_CATALOG;
+}
+
+function filteredLookup(){
+  const keyword=lookupKeyword.toLowerCase();
+  return lookupData().filter(item=>
+    Object.values(item).some(v=>
+      String(v).toLowerCase().includes(keyword)
+    )
+  );
+}
+
+function openLookup(type){
+  if(!active)return;
+  collectForm();
+
+  lookupType=type;
+  lookupPage=1;
+  lookupKeyword="";
+  lookupLayer.hidden=false;
+  $("lookupSearch").value="";
+
+  const title={
+    equipment:"设备管理-设备信息",
+    repairer:"人员管理-维修人员",
+    transfer:"转派工单-选择维修人",
+    part:"基础资料-备品备件信息"
+  };
+
+  $("lookupTitle").textContent=title[type]||"选择信息";
+  $("lookupSearchLabel").textContent=
+    type==="equipment"?"设备编码/设备名称":
+    type==="part"?"备件编码/备件名称":
+    "维修人/维修组";
+
+  renderLookup();
+}
+
+function renderLookup(){
+  const columns=
+    lookupType==="equipment"
+      ? [["code","设备编码"],["name","设备名称"]]
+      : lookupType==="part"
+      ? [["code","备品备件编码"],["name","备品备件名称"],
+         ["desc","备品备件描述"],["model","备品备件型号"],
+         ["category","备品备件类别"]]
+      : [["name","维修人"],["group","维修组"]];
+
+  const all=filteredLookup();
+  const pages=Math.max(1,Math.ceil(all.length/lookupPageSize));
+  lookupPage=Math.min(lookupPage,pages);
+  const start=(lookupPage-1)*lookupPageSize;
+  const rows=all.slice(start,start+lookupPageSize);
+
+  $("lookupThead").innerHTML="<tr>"+
+    columns.map(c=>"<th>"+c[1]+"</th>").join("")+
+    "</tr>";
+
+  $("lookupTbody").innerHTML=rows.map((item,i)=>`
+    <tr data-pick="${start+i}">
+      ${columns.map(c=>`<td>${esc(item[c[0]]||"--")}</td>`).join("")}
+    </tr>
+  `).join("") || `
+    <tr><td class="empty" colspan="${columns.length}">
+      没有查询到数据
+    </td></tr>
+  `;
+
+  $("lookupCount").textContent="共 "+all.length+" 条";
+  $("lookupPageLabel").textContent=lookupPage+" / "+pages;
+  $("lookupPrev").disabled=lookupPage<=1;
+  $("lookupNext").disabled=lookupPage>=pages;
+}
+
+function selectLookup(index){
+  const item=filteredLookup()[index];
+  if(!item)return;
+
+  if(lookupType==="equipment"){
+    active.equipmentCode=item.code;
+    active.equipmentName=item.name;
+  }
+  else if(lookupType==="repairer"){
+    active.repairer=item.name;
+    active.group=item.group;
+  }
+  else if(lookupType==="transfer"){
+    const reason=prompt("请输入转派原因（可选）","") ;
+    if(reason===null)return;
+
+    active.repairer=item.name;
+    active.group=item.group;
+    active.status="待接单";
+    logAction("转派给"+item.name+"（"+item.group+"）；原因："+reason);
+    saveActive();
+    toast("转派成功");
+  }
+  else if(lookupType==="part"){
+    active.parts.push({
+      code:item.code,
+      name:item.name,
+      desc:item.desc,
+      qty:"1"
+    });
+  }
+
+  lookupLayer.hidden=true;
+  drawDetail();
+}
+
+function closeLookup(){
+  lookupLayer.hidden=true;
+}
+
+$("detailBody").addEventListener("click",e=>{
+  const target=e.target.closest("[data-lookup]");
+  if(!target||!target.dataset.lookup||target.disabled)return;
+  const type=target.dataset.lookup;
+  if(type==="equipment"||type==="repairer"||type==="part"){
+    openLookup(type);
+  }
+});
+
+$("detailFooter").addEventListener("click",e=>{
+  const target=e.target.closest('[data-action="transfer"]');
+  if(target){
+    openLookup("transfer");
+  }
+},true);
+
+$("lookupClose").onclick=closeLookup;
+$("lookupCancel").onclick=closeLookup;
+
+$("lookupSearchBtn").onclick=()=>{
+  lookupKeyword=$("lookupSearch").value.trim();
+  lookupPage=1;
+  renderLookup();
+};
+$("lookupSearch").addEventListener("keydown",e=>{
+  if(e.key==="Enter"){
+    $("lookupSearchBtn").click();
+  }
+});
+$("lookupReset").onclick=()=>{
+  lookupKeyword="";
+  lookupPage=1;
+  $("lookupSearch").value="";
+  renderLookup();
+};
+
+$("lookupPrev").onclick=()=>{
+  lookupPage--;
+  renderLookup();
+};
+$("lookupNext").onclick=()=>{
+  lookupPage++;
+  renderLookup();
+};
+
+$("lookupTbody").addEventListener("click",e=>{
+  const item=e.target.closest("[data-pick]");
+  if(item)selectLookup(Number(item.dataset.pick));
+});
+
+
+lookupLayer.addEventListener("click",e=>{
+  if(e.target===lookupLayer)closeLookup();
+});
+
+window.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&!lookupLayer.hidden){
+    e.stopImmediatePropagation();
+    closeLookup();
+  }
+},true);
+
+// 旧演示数据如有待验收状态，适配取消验收后的新流程。
+// 仅作用于当前页面浏览器里的演示记录。
+orders.forEach(o=>{
+  if(o.status==="待验收"){
+    o.status="维修中";
+  }
+});
+persist();
+
+
+// HT_EQUIPMENT_REV5
+// 支持：摄像头二维码识别（浏览器支持时）
+// 以及扫码枪输入、手动输入设备编码
+
+const equipScanLayer = document.createElement("div");
+
+equipScanLayer.className = "equip-scan-layer";
+equipScanLayer.hidden = true;
+
+equipScanLayer.innerHTML = `
+  <div class="equip-scan-panel"
+       role="dialog"
+       aria-modal="true"
+       aria-label="设备扫码">
+
+    <div class="equip-scan-head">
+      <strong>扫码识别设备</strong>
+      <button type="button"
+        class="btn small"
+        id="equipScanClose">关闭</button>
+    </div>
+
+    <video id="equipScanVideo"
+      autoplay playsinline muted></video>
+
+    <p class="equip-scan-status" id="equipScanStatus">
+      准备启用摄像头...
+    </p>
+
+    <label for="equipScanText">
+      扫码枪输入或手动输入设备编码
+    </label>
+
+    <div class="equip-scan-input">
+      <input id="equipScanText"
+        autocomplete="off"
+        placeholder="例如 P3203；扫码后按回车">
+      <button type="button"
+        class="btn blue"
+        id="equipScanConfirm">确认</button>
+    </div>
+
+    <p class="note">
+      摄像头扫码需要支持 BarcodeDetector 的浏览器。
+      不支持时可使用扫码枪输入。
+    </p>
+
+  </div>
+`;
+
+document.body.appendChild(equipScanLayer);
+
+let equipScanStream = null;
+let equipScanDetector = null;
+let equipScanRunning = false;
+let equipLastCode = "";
+let equipLastAt = 0;
+
+
+// 停止摄像头
+function stopEquipCamera(){
+  equipScanRunning = false;
+
+  if(equipScanStream){
+    equipScanStream.getTracks().forEach(track => {
+      track.stop();
+    });
+    equipScanStream = null;
+  }
+
+  $("equipScanVideo").srcObject = null;
+}
+
+function closeEquipScan(){
+  stopEquipCamera();
+  equipScanLayer.hidden = true;
+}
+
+
+// 从二维码中提取设备编码
+function scannedEquipmentCode(raw){
+  let value = String(raw || "").trim();
+
+  try{
+    const url = new URL(value,location.href);
+
+    for(const key of [
+      "equipmentCode","deviceCode","code","device"
+    ]){
+      if(url.searchParams.get(key)){
+        value = url.searchParams.get(key);
+        break;
+      }
+    }
+  }catch(e){}
+
+  return value.trim().toUpperCase();
+}
+
+
+// 扫码成功后带出设备信息
+function useScannedEquipment(raw){
+  if(!active || !editableReport())return false;
+
+  const code = scannedEquipmentCode(raw);
+
+  if(!equipmentMap[code]){
+    $("equipScanStatus").textContent =
+      "未找到设备：" + code +
+      "。请确认设备编码是否存在于演示字典中。";
+    return false;
+  }
+
+  active.equipmentCode = code;
+  active.equipmentName = equipmentMap[code][0];
+  active.department = equipmentMap[code][1];
+
+  closeEquipScan();
+  drawDetail();
+
+  toast("已识别设备：" + code);
+  return true;
+}
+
+
+// 摄像头循环识别
+async function equipScanFrame(){
+  if(!equipScanRunning)return;
+
+  try{
+    const video = $("equipScanVideo");
+
+    if(video.readyState >= 2){
+      const found = await equipScanDetector.detect(video);
+
+      if(found.length && found[0].rawValue){
+        const value = found[0].rawValue;
+        const time = Date.now();
+
+        if(
+          value !== equipLastCode ||
+          time - equipLastAt > 2500
+        ){
+          equipLastCode = value;
+          equipLastAt = time;
+
+          if(useScannedEquipment(value))return;
+        }
+      }
+    }
+  }catch(e){
+    $("equipScanStatus").textContent =
+      "自动识别暂不可用，可使用扫码枪或手动输入。";
+    stopEquipCamera();
+  }
+
+  if(equipScanRunning){
+    requestAnimationFrame(equipScanFrame);
+  }
+}
+
+
+// 打开扫码窗口
+async function openEquipScan(){
+  if(!active || !editableReport())return;
+
+  collectForm();
+
+  equipScanLayer.hidden = false;
+  $("equipScanText").value = "";
+  $("equipScanStatus").textContent = "准备启用摄像头...";
+  $("equipScanText").focus();
+
+  if(
+    !window.isSecureContext ||
+    !navigator.mediaDevices?.getUserMedia ||
+    !("BarcodeDetector" in window)
+  ){
+    $("equipScanStatus").textContent =
+      "当前浏览器不支持摄像头二维码自动识别，" +
+      "请使用扫码枪或手动输入设备编码。";
+    return;
+  }
+
+  try{
+    equipScanDetector = new BarcodeDetector({
+      formats:["qr_code"]
+    });
+
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:"environment"},
+      audio:false
+    });
+
+    if(equipScanLayer.hidden){
+      stream.getTracks().forEach(track=>track.stop());
+      return;
+    }
+
+    equipScanStream = stream;
+
+    const video = $("equipScanVideo");
+    video.srcObject = stream;
+
+    await video.play();
+
+    equipScanRunning = true;
+
+    $("equipScanStatus").textContent =
+      "将设备二维码放在摄像头前，或使用扫码枪。";
+
+    requestAnimationFrame(equipScanFrame);
+
+  }catch(e){
+    stopEquipCamera();
+
+    $("equipScanStatus").textContent =
+      "无法启用摄像头，请使用扫码枪或手动输入。";
+  }
+}
+
+
+// 绑定设备编码旁的扫码按钮
+$("detailBody").addEventListener("click",e=>{
+  if(e.target.closest("[data-equip-scan]")){
+    openEquipScan();
+  }
+});
+
+$("equipScanClose").onclick = closeEquipScan;
+
+$("equipScanConfirm").onclick = ()=>{
+  useScannedEquipment($("equipScanText").value);
+};
+
+$("equipScanText").addEventListener("keydown",e=>{
+  if(e.key === "Enter"){
+    e.preventDefault();
+    useScannedEquipment(e.target.value);
+  }
+});
+
+equipScanLayer.addEventListener("click",e=>{
+  if(e.target === equipScanLayer){
+    closeEquipScan();
+  }
+});
+
+renderList();
+</script>
+</body>
+</html>
